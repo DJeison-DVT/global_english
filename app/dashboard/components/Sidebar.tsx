@@ -1,26 +1,17 @@
+"use client";
+
 import Image from "next/image";
 import { Briefcase, Calendar, Settings } from "react-feather";
 import Tooltipped from "@/app/components/Tooltipped";
-
-interface MenuItemProps {
-	title: string;
-	icon: React.ComponentType;
-}
-
-const MenuItem: React.FC<MenuItemProps> = ({ title, icon: Icon }) => {
-	return (
-		<div className='hover:cursor-pointer flex items-center justify-between w-full border-b-4 py-2 border-transparent hover:border-primary transition-colors duration-300'>
-			<Icon />
-			<div>{title}</div>
-		</div>
-	);
-};
+import MenuItem from "./MenuItem";
+import { useRouter } from "next/navigation";
 
 export default function Sidebar() {
+	const router = useRouter();
 	return (
 		<div className='flex-none w-60 bg-white p-10 '>
 			<div className='flex flex-col justify-between h-full'>
-				<div className='flex flex-col gap-2 items-center'>
+				<div className='flex flex-col gap-2 items-center '>
 					<Image
 						src='/logo_cropped.jpg'
 						alt='Logo'
@@ -28,8 +19,22 @@ export default function Sidebar() {
 						height={80}
 						className='pb-4'
 					/>
-					<MenuItem title='Clases' icon={Briefcase} />
-					<MenuItem title='Calendario' icon={Calendar} />
+					<div className='w-full *:w-full'>
+						<div
+							onClick={() => {
+								router.push("/dashboard");
+							}}
+						>
+							<MenuItem title='Clases' icon={Briefcase} />
+						</div>
+						<div
+							onClick={() => {
+								router.push("/dashboard");
+							}}
+						>
+							<MenuItem title='Calendario' icon={Calendar} />
+						</div>
+					</div>
 				</div>
 				<div className='flex justify-end'>
 					<Tooltipped tooltip='Opciones'>

@@ -19,11 +19,11 @@ body {
 }
 
 .tooltip {
-	@apply invisible absolute;
+	@apply absolute opacity-0 transition-opacity duration-500;
 }
 
 .has-tooltip:hover .tooltip {
-	@apply visible z-50;
+	@apply opacity-100 z-50;
 }
 
 @layer utilities {

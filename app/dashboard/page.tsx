@@ -1,74 +1,35 @@
 import React from "react";
-import { MoreVertical, UserCheck } from "react-feather";
-import Tooltipped from "@/app/components/Tooltipped";
 import Breadcrumb from "./components/Breadcrumb";
-
-interface Class {
-	company: string;
-	startingDate: string;
-	endDate: string;
-}
-
-function capitalize(string: string) {
-	return string.charAt(0).toUpperCase() + string.slice(1);
-}
-
-function formatDate(date: string) {
-	const dateObj = new Date(date);
-
-	return capitalize(
-		dateObj
-			.toLocaleDateString("es-ES", { month: "short", year: "numeric" })
-			.replace(".", "")
-	);
-}
-
-const ClassCard: React.FC<Class> = ({ company, startingDate, endDate }) => {
-	return (
-		<div className='w-80'>
-			<div className='hover:cursor-pointer text-2xl flex bg-white items-end h-20 rounded-t-lg'>
-				<div className='m-3'>{company}</div>
-			</div>
-			<div className='flex p-4 justify-between items-center bg-primary text-white rounded-b-lg'>
-				<div className='hover:cursor-pointer'>
-					{formatDate(startingDate)} - {formatDate(endDate)}
-				</div>
-				<div className='flex gap-2 '>
-					<Tooltipped tooltip='Tomar Asistencia'>
-						<UserCheck />
-					</Tooltipped>
-					<Tooltipped tooltip='Opciones'>
-						<MoreVertical />
-					</Tooltipped>
-				</div>
-			</div>
-		</div>
-	);
-};
+import ClassCard from "./components/ClassCard";
 
 function dashboard() {
 	const scheduledClasses = [
 		{
+			id: "1",
 			company: "Company 1",
 			startingDate: "2021-01-01",
 			endDate: "2021-01-31",
 		},
 		{
+			id: "2",
 			company: "Company 2",
 			startingDate: "2021-02-01",
 			endDate: "2021-02-28",
 		},
 		{
+			id: "3",
 			company: "Company 3",
 			startingDate: "2021-03-01",
 			endDate: "2021-03-31",
 		},
 		{
+			id: "4",
 			company: "Company 4",
 			startingDate: "2021-04-01",
 			endDate: "2021-04-30",
 		},
 		{
+			id: "5",
 			company: "Company 5",
 			startingDate: "2021-05-01",
 			endDate: "2021-05-31",
@@ -82,6 +43,7 @@ function dashboard() {
 				<div className='flex flex-wrap gap-10 justify-start'>
 					{scheduledClasses.map((scheduledClass) => (
 						<ClassCard
+							id={scheduledClass.id}
 							key={scheduledClass.company}
 							company={scheduledClass.company}
 							startingDate={scheduledClass.startingDate}
