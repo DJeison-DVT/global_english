@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { Briefcase, Calendar, Settings } from "react-feather";
+import Tooltipped from "@/app/components/Tooltipped";
 
 interface MenuItemProps {
 	title: string;
@@ -8,7 +9,7 @@ interface MenuItemProps {
 
 const MenuItem: React.FC<MenuItemProps> = ({ title, icon: Icon }) => {
 	return (
-		<div className='flex items-center justify-between w-full border-b-4 py-2 border-transparent hover:border-primary transition-colors duration-300'>
+		<div className='hover:cursor-pointer flex items-center justify-between w-full border-b-4 py-2 border-transparent hover:border-primary transition-colors duration-300'>
 			<Icon />
 			<div>{title}</div>
 		</div>
@@ -31,7 +32,9 @@ export default function Sidebar() {
 					<MenuItem title='Calendario' icon={Calendar} />
 				</div>
 				<div className='flex justify-end'>
-					<Settings />
+					<Tooltipped tooltip='Opciones'>
+						<Settings />
+					</Tooltipped>
 				</div>
 			</div>
 		</div>

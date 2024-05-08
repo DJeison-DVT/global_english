@@ -1,5 +1,6 @@
 import React from "react";
 import { MoreVertical, UserCheck } from "react-feather";
+import Tooltipped from "@/app/components/Tooltipped";
 import Breadcrumb from "./components/Breadcrumb";
 
 interface Class {
@@ -25,16 +26,20 @@ function formatDate(date: string) {
 const ClassCard: React.FC<Class> = ({ company, startingDate, endDate }) => {
 	return (
 		<div className='w-80'>
-			<div className='text-2xl flex bg-white items-end h-20 rounded-t-lg'>
+			<div className='hover:cursor-pointer text-2xl flex bg-white items-end h-20 rounded-t-lg'>
 				<div className='m-3'>{company}</div>
 			</div>
-			<div className='flex p-3 justify-between items-center bg-primary text-white rounded-b-lg'>
-				<div>
+			<div className='flex p-4 justify-between items-center bg-primary text-white rounded-b-lg'>
+				<div className='hover:cursor-pointer'>
 					{formatDate(startingDate)} - {formatDate(endDate)}
 				</div>
-				<div className='flex'>
-					<UserCheck />
-					<MoreVertical />
+				<div className='flex gap-2 '>
+					<Tooltipped tooltip='Tomar Asistencia'>
+						<UserCheck />
+					</Tooltipped>
+					<Tooltipped tooltip='Opciones'>
+						<MoreVertical />
+					</Tooltipped>
 				</div>
 			</div>
 		</div>
