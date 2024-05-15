@@ -2,7 +2,12 @@
 
 import Image from "next/image";
 import { Briefcase, Calendar, Settings } from "react-feather";
-import Tooltipped from "@/app/components/Tooltipped";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
 import MenuItem from "./MenuItem";
 import { useRouter } from "next/navigation";
 
@@ -37,9 +42,16 @@ export default function Sidebar() {
 					</div>
 				</div>
 				<div className='flex justify-end'>
-					<Tooltipped tooltip='Opciones'>
-						<Settings />
-					</Tooltipped>
+					<TooltipProvider>
+						<Tooltip>
+							<TooltipTrigger>
+								<Settings />
+							</TooltipTrigger>
+							<TooltipContent>
+								<p>Opciones</p>
+							</TooltipContent>
+						</Tooltip>
+					</TooltipProvider>
 				</div>
 			</div>
 		</div>

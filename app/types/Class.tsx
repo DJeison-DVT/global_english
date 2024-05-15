@@ -3,4 +3,5 @@ export default interface Class {
 	company: string;
 	startingDate: string;
 	endDate: string;
+	students: number;
 }

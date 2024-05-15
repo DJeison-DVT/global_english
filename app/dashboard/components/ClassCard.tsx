@@ -3,7 +3,12 @@
 import { useRouter } from "next/navigation";
 import Class from "@/app/types/Class";
 import { MoreVertical, UserCheck } from "react-feather";
-import Tooltipped from "@/app/components/Tooltipped";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 function capitalize(string: string) {
 	return string.charAt(0).toUpperCase() + string.slice(1);
@@ -38,12 +43,27 @@ const ClassCard: React.FC<Class> = ({ id, company, startingDate, endDate }) => {
 					{formatDate(startingDate)} - {formatDate(endDate)}
 				</div>
 				<div className='flex gap-2 '>
-					<Tooltipped tooltip='Tomar Asistencia'>
-						<UserCheck />
-					</Tooltipped>
-					<Tooltipped tooltip='Opciones'>
-						<MoreVertical />
-					</Tooltipped>
+					<TooltipProvider>
+						<Tooltip>
+							<TooltipTrigger>
+								<UserCheck />
+							</TooltipTrigger>
+							<TooltipContent>
+								<p>Tomar Asistencia</p>
+							</TooltipContent>
+						</Tooltip>
+					</TooltipProvider>
+
+					<TooltipProvider>
+						<Tooltip>
+							<TooltipTrigger>
+								<MoreVertical />
+							</TooltipTrigger>
+							<TooltipContent>
+								<p>Opciones</p>
+							</TooltipContent>
+						</Tooltip>
+					</TooltipProvider>
 				</div>
 			</div>
 		</div>
