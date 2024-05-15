@@ -1,6 +1,4 @@
 import Class from "@/app/types/Class";
-import Sidebar from "./components/Sidebar";
-import Header from "@/app/components/Header";
 import {
 	Table,
 	TableBody,
@@ -10,33 +8,14 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 import { Progress } from "@/components/ui/progress";
+import { formatDate } from "@/app/utils/date";
 
 interface ClassAssistance {
 	date: string;
 	assistants: number;
 }
 
-interface TotalClassAssistance extends ClassAssistance {
-	total: number;
-}
-
-function formatDate(date: string) {
-	const dateObj = new Date(date);
-	return dateObj
-		.toLocaleDateString("es-ES", {
-			weekday: "long",
-			day: "numeric",
-			month: "long",
-			year: "numeric",
-		})
-		.replace(/ de /g, " ")
-		.replace(",", "")
-		.split(" ")
-		.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-		.join(" ");
-}
-
-export default function Page({ params }: { params: { slug: string } }) {
+export default function Page() {
 	const classData: Class = {
 		id: "1",
 		company: "Company 1",
@@ -89,31 +68,29 @@ export default function Page({ params }: { params: { slug: string } }) {
 	];
 
 	return (
-		<div className='flex-1 mx-24'>
-			<Table>
-				<TableHeader>
-					<TableRow>
-						<TableHead className='w-[250px]'>Fecha</TableHead>
-						<TableHead>Asistencias</TableHead>
+		<Table>
+			<TableHeader>
+				<TableRow>
+					<TableHead className='w-[250px]'>Fecha</TableHead>
+					<TableHead>Asistencias</TableHead>
+				</TableRow>
+			</TableHeader>
+			<TableBody>
+				{classAssistance.map((day, idx) => (
+					<TableRow className='hover:bg-slate-200'>
+						<TableCell>{formatDate(day.date)}</TableCell>
+						<TableCell className='flex'>
+							<Progress
+								className='mx-4'
+								value={(day.assistants / classData.students) * 100}
+							/>
+							<div className='text-nowrap'>
+								{day.assistants} / {classData.students}
+							</div>
+						</TableCell>
 					</TableRow>
-				</TableHeader>
-				<TableBody>
-					{classAssistance.map((day, idx) => (
-						<TableRow>
-							<TableCell>{formatDate(day.date)}</TableCell>
-							<TableCell className='flex'>
-								<Progress
-									className='mx-4'
-									value={(day.assistants / classData.students) * 100}
-								/>
-								<div className='text-nowrap'>
-									{day.assistants} / {classData.students}
-								</div>
-							</TableCell>
-						</TableRow>
-					))}
-				</TableBody>
-			</Table>
-		</div>
+				))}
+			</TableBody>
+		</Table>
 	);
 }

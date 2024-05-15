@@ -28,9 +28,9 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 
 				<div className='flex'>
 					<div className='flex-none'>
-						<Sidebar />
+						<Sidebar classId={params.slug} />
 					</div>
-					{children}
+					<div className='flex-1 mx-24'>{children}</div>
 				</div>
 			</div>
 		</div>

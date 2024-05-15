@@ -10,10 +10,8 @@ import {
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
 import MenuItem from "./MenuItem";
-import { useRouter } from "next/navigation";
 
 export default function Sidebar() {
-	const router = useRouter();
 	return (
 		<div className='flex-none w-60 bg-white p-10 '>
 			<div className='flex flex-col justify-between h-full'>

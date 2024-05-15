@@ -10,20 +10,7 @@ import {
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
 import Link from "next/link";
-
-function capitalize(string: string) {
-	return string.charAt(0).toUpperCase() + string.slice(1);
-}
-
-function formatDate(date: string) {
-	const dateObj = new Date(date);
-
-	return capitalize(
-		dateObj
-			.toLocaleDateString("es-ES", { month: "short", year: "numeric" })
-			.replace(".", "")
-	);
-}
+import { formatDate } from "@/app/utils/date";
 
 const ClassCard: React.FC<Class> = ({ id, company, startingDate, endDate }) => {
 	const router = useRouter();
