@@ -36,27 +36,6 @@ function formatDate(date: string) {
 		.join(" ");
 }
 
-const DayAssistance = ({ date, assistants, total }: TotalClassAssistance) => {
-	return (
-		<tr className='odd:bg-primary/40 even:bg-white p-2 rounded-md overflow-hidden '>
-			<td>{formatDate(date)}</td>
-			<td>
-				<meter
-					min={0}
-					max={total}
-					value={assistants}
-					low={6}
-					high={8}
-					optimum={9}
-				></meter>
-			</td>
-			<td>
-				{assistants} / {total}
-			</td>
-		</tr>
-	);
-};
-
 export default function Page({ params }: { params: { slug: string } }) {
 	const classData: Class = {
 		id: "1",
@@ -110,44 +89,31 @@ export default function Page({ params }: { params: { slug: string } }) {
 	];
 
 	return (
-		<div className='w-full bg-secondary overflow-hidden'>
-			<div className='mx-24'>
-				<Header
-					titles={["Clases", classData.company]}
-					links={["/dashboard", `/dashboard/classes/${params.slug}`]}
-				/>
-				<div className='flex'>
-					<div className='flex-none'>
-						<Sidebar />
-					</div>
-					<div className='flex-1 mx-24'>
-						<Table>
-							<TableHeader>
-								<TableRow>
-									<TableHead className='w-[250px]'>Fecha</TableHead>
-									<TableHead>Asistencias</TableHead>
-								</TableRow>
-							</TableHeader>
-							<TableBody>
-								{classAssistance.map((day, idx) => (
-									<TableRow>
-										<TableCell>{formatDate(day.date)}</TableCell>
-										<TableCell className='flex'>
-											<Progress
-												className='mx-4'
-												value={(day.assistants / classData.students) * 100}
-											/>
-											<div className='text-nowrap'>
-												{day.assistants} / {classData.students}
-											</div>
-										</TableCell>
-									</TableRow>
-								))}
-							</TableBody>
-						</Table>
-					</div>
-				</div>
-			</div>
+		<div className='flex-1 mx-24'>
+			<Table>
+				<TableHeader>
+					<TableRow>
+						<TableHead className='w-[250px]'>Fecha</TableHead>
+						<TableHead>Asistencias</TableHead>
+					</TableRow>
+				</TableHeader>
+				<TableBody>
+					{classAssistance.map((day, idx) => (
+						<TableRow>
+							<TableCell>{formatDate(day.date)}</TableCell>
+							<TableCell className='flex'>
+								<Progress
+									className='mx-4'
+									value={(day.assistants / classData.students) * 100}
+								/>
+								<div className='text-nowrap'>
+									{day.assistants} / {classData.students}
+								</div>
+							</TableCell>
+						</TableRow>
+					))}
+				</TableBody>
+			</Table>
 		</div>
 	);
 }

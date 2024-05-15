@@ -9,6 +9,7 @@ import {
 	TooltipProvider,
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
+import Link from "next/link";
 
 function capitalize(string: string) {
 	return string.charAt(0).toUpperCase() + string.slice(1);
@@ -46,7 +47,9 @@ const ClassCard: React.FC<Class> = ({ id, company, startingDate, endDate }) => {
 					<TooltipProvider>
 						<Tooltip>
 							<TooltipTrigger>
-								<UserCheck />
+								<Link href={`dashboard/classes/${id}/tomar-asistencia`}>
+									<UserCheck />
+								</Link>
 							</TooltipTrigger>
 							<TooltipContent>
 								<p>Tomar Asistencia</p>

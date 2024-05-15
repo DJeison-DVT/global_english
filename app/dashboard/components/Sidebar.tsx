@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import Image from "next/image";
 import { Briefcase, Calendar, Settings } from "react-feather";
 import {
@@ -25,20 +26,12 @@ export default function Sidebar() {
 						className='pb-4'
 					/>
 					<div className='w-full *:w-full'>
-						<div
-							onClick={() => {
-								router.push("/dashboard");
-							}}
-						>
+						<Link href='/dashboard'>
 							<MenuItem title='Clases' icon={Briefcase} />
-						</div>
-						<div
-							onClick={() => {
-								router.push("/dashboard");
-							}}
-						>
+						</Link>
+						<Link href='/dashboard'>
 							<MenuItem title='Calendario' icon={Calendar} />
-						</div>
+						</Link>
 					</div>
 				</div>
 				<div className='flex justify-end'>
