@@ -1,6 +1,6 @@
 import React from "react";
-import Breadcrumb from "./components/Breadcrumb";
 import ClassCard from "./components/ClassCard";
+import Header from "../components/Header";
 
 function dashboard() {
 	const scheduledClasses = [
@@ -39,7 +39,9 @@ function dashboard() {
 	return (
 		<div className='flex-1 bg-secondary'>
 			<div className='mx-24'>
-				<Breadcrumb breadcrumbs={["Clases"]} />
+				<div>
+					<Header titles={["Clases"]} links={["/dashboard"]} />
+				</div>
 				<div className='flex flex-wrap gap-10 justify-start'>
 					{scheduledClasses.map((scheduledClass) => (
 						<ClassCard

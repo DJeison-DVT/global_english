@@ -1,6 +1,15 @@
 import Class from "@/app/types/Class";
-import Breadcrumb from "../../components/Breadcrumb";
 import Sidebar from "./components/Sidebar";
+import Header from "@/app/components/Header";
+import {
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableHeader,
+	TableRow,
+} from "@/components/ui/table";
+import { Progress } from "@/components/ui/progress";
 
 interface ClassAssistance {
 	date: string;
@@ -51,7 +60,7 @@ const DayAssistance = ({ date, assistants, total }: TotalClassAssistance) => {
 export default function Page({ params }: { params: { slug: string } }) {
 	const classData: Class = {
 		id: "1",
-		company: "Company",
+		company: "Company 1",
 		startingDate: "2021-09-01",
 		endDate: "2021-09-30",
 		students: 10,
@@ -103,29 +112,39 @@ export default function Page({ params }: { params: { slug: string } }) {
 	return (
 		<div className='w-full bg-secondary overflow-hidden'>
 			<div className='mx-24'>
-				<Breadcrumb breadcrumbs={["Clases", params.slug]} />
+				<Header
+					titles={["Clases", classData.company]}
+					links={["/dashboard", `/dashboard/classes/${params.slug}`]}
+				/>
 				<div className='flex'>
 					<div className='flex-none'>
 						<Sidebar />
 					</div>
-					<div className='flex-1 '>
-						<table className='border-spacing-y-2 border-separate '>
-							<thead>
-								<tr>
-									<th>Fecha</th>
-									<th colSpan={2}>Asistencia</th>
-								</tr>
-							</thead>
-							<tbody>
+					<div className='flex-1 mx-24'>
+						<Table>
+							<TableHeader>
+								<TableRow>
+									<TableHead className='w-[250px]'>Fecha</TableHead>
+									<TableHead>Asistencias</TableHead>
+								</TableRow>
+							</TableHeader>
+							<TableBody>
 								{classAssistance.map((day, idx) => (
-									<DayAssistance
-										key={idx}
-										{...day}
-										total={classData.students}
-									/>
+									<TableRow>
+										<TableCell>{formatDate(day.date)}</TableCell>
+										<TableCell className='flex'>
+											<Progress
+												className='mx-4'
+												value={(day.assistants / classData.students) * 100}
+											/>
+											<div className='text-nowrap'>
+												{day.assistants} / {classData.students}
+											</div>
+										</TableCell>
+									</TableRow>
 								))}
-							</tbody>
-						</table>
+							</TableBody>
+						</Table>
 					</div>
 				</div>
 			</div>
