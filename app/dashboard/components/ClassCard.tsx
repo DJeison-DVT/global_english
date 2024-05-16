@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import Class from "@/app/types/Class";
+import { Subject } from "@/app/types/types";
 import { MoreVertical, UserCheck } from "react-feather";
 import {
 	Tooltip,
@@ -12,7 +12,12 @@ import {
 import Link from "next/link";
 import { formatDate } from "@/app/utils/date";
 
-const ClassCard: React.FC<Class> = ({ id, company, startingDate, endDate }) => {
+const ClassCard: React.FC<Subject> = ({
+	id,
+	company,
+	startingDate,
+	endDate,
+}) => {
 	const router = useRouter();
 	const handleClick = () => {
 		router.push(`/dashboard/classes/${id}`);

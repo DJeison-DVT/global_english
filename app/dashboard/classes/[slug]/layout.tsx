@@ -1,22 +1,20 @@
+// app/dashboard/classes/[slug]/layout.tsx
 import React from "react";
 import Header from "@/app/components/Header";
-import Class from "@/app/types/Class";
 import Sidebar from "./components/Sidebar";
+import { Subjects } from "@/app/utils/consts";
 
 interface DashboardLayoutProps {
 	children: React.ReactNode;
 	params: { slug: string };
 }
+
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 	children,
 	params,
 }) => {
-	const classData: Class = {
-		id: "1",
-		company: "Company 1",
-		startingDate: "2021-09-01",
-		endDate: "2021-09-30",
-		students: 10,
+	const classData = Subjects.find((subject) => subject.id === params.slug) || {
+		company: "",
 	};
 	return (
 		<div className='w-full bg-secondary overflow-hidden'>
@@ -25,12 +23,11 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 					titles={["Clases", classData.company]}
 					links={["/dashboard", `/dashboard/classes/${params.slug}`]}
 				/>
-
 				<div className='flex'>
 					<div className='flex-none'>
 						<Sidebar classId={params.slug} />
 					</div>
-					<div className='flex-1 mx-24'>{children}</div>
+					<div className='flex-1 mx-24 mb-4'>{children}</div>
 				</div>
 			</div>
 		</div>
