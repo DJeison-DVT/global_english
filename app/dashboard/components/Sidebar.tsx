@@ -11,7 +11,7 @@ import MenuItem from "./MenuItem";
 
 export default function Sidebar() {
 	return (
-		<div className='flex-none w-60 bg-white p-10 '>
+		<div className='flex-none w-60 bg-white p-8 '>
 			<div className='flex flex-col justify-between h-full'>
 				<div className='flex flex-col gap-2 items-center '>
 					<Image

@@ -1,8 +1,8 @@
-// app/dashboard/classes/[slug]/layout.tsx
 import React from "react";
 import Header from "@/app/components/Header";
 import Sidebar from "./components/Sidebar";
 import { Subjects } from "@/app/utils/consts";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface DashboardLayoutProps {
 	children: React.ReactNode;
@@ -16,18 +16,19 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 	const classData = Subjects.find((subject) => subject.id === params.slug) || {
 		company: "",
 	};
+
 	return (
-		<div className='w-full bg-secondary overflow-hidden'>
-			<div className='mx-24'>
+		<div className='w-full bg-secondary m-0 flex'>
+			<div className='mx-24 h-screen w-full '>
 				<Header
 					titles={["Clases", classData.company]}
 					links={["/dashboard", `/dashboard/classes/${params.slug}`]}
 				/>
-				<div className='flex'>
+				<div className='h-[calc(100%-120px)] flex'>
 					<div className='flex-none'>
 						<Sidebar classId={params.slug} />
 					</div>
-					<div className='flex-1 mx-24 mb-4'>{children}</div>
+					{children}
 				</div>
 			</div>
 		</div>

@@ -157,4 +157,9 @@ export const classAssistance: Class[] = [
 		assisted: [Students[0]],
 		Subject: Subjects[0],
 	},
+	{
+		date: "2021-09-17",
+		assisted: [Students[0], Students[1]],
+		Subject: Subjects[0],
+	},
 ];
