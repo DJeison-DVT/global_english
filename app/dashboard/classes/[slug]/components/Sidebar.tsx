@@ -8,7 +8,7 @@ interface SidebarProps {
 
 export default function Sidebar({ classId }: SidebarProps) {
 	return (
-		<div className='flex flex-col w-48'>
+		<div className='flex flex-col w-48 gap-3'>
 			<Link href={`/dashboard/classes/${classId}`}>
 				<MenuItem title='Asistencias' icon={Users} />
 			</Link>

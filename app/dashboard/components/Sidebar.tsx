@@ -21,7 +21,7 @@ export default function Sidebar() {
 						height={80}
 						className='pb-4'
 					/>
-					<div className='w-full *:w-full'>
+					<div className='w-full *:w-full flex flex-col gap-3'>
 						<Link href='/dashboard'>
 							<MenuItem title='Clases' icon={Briefcase} />
 						</Link>

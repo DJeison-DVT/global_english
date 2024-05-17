@@ -15,7 +15,7 @@ import { Subjects, classAssistance } from "@/app/utils/consts";
 export default function Page() {
 	const totalStudents = Subjects[0].students.length;
 	return (
-		<ScrollArea className='w-full h-full pl-8'>
+		<ScrollArea className='w-full h-full '>
 			<Table>
 				<TableHeader>
 					<TableRow>

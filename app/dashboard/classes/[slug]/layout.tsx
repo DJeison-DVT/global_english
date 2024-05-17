@@ -25,7 +25,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 					links={["/dashboard", `/dashboard/classes/${params.slug}`]}
 				/>
 				<div className='h-[calc(100%-120px)] flex'>
-					<div className='flex-none'>
+					<div className='flex-none mr-14'>
 						<Sidebar classId={params.slug} />
 					</div>
 					{children}

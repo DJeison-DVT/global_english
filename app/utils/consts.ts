@@ -1,4 +1,4 @@
-import { Student, Subject, Class } from "@/app/types/types";
+import { Student, Subject, Class, Assistance } from "@/app/types/types";
 
 const Students: Student[] = [
 	{
@@ -21,6 +21,126 @@ const Students: Student[] = [
 		name: "Bob",
 		surname: "Smith",
 	},
+	{
+		id: "5",
+		name: "Charlie",
+		surname: "Brown",
+	},
+	{
+		id: "6",
+		name: "David",
+		surname: "Williams",
+	},
+	{
+		id: "7",
+		name: "Eve",
+		surname: "Davis",
+	},
+	{
+		id: "8",
+		name: "Frank",
+		surname: "Taylor",
+	},
+	{
+		id: "9",
+		name: "Grace",
+		surname: "Moore",
+	},
+	{
+		id: "10",
+		name: "Henry",
+		surname: "Anderson",
+	},
+	{
+		id: "11",
+		name: "Isabel",
+		surname: "Martinez",
+	},
+	{
+		id: "12",
+		name: "Jack",
+		surname: "Harris",
+	},
+	{
+		id: "13",
+		name: "Katy",
+		surname: "Clark",
+	},
+	{
+		id: "14",
+		name: "Liam",
+		surname: "Young",
+	},
+	{
+		id: "15",
+		name: "Mia",
+		surname: "Allen",
+	},
+	{
+		id: "16",
+		name: "Nathan",
+		surname: "King",
+	},
+	{
+		id: "17",
+		name: "Olivia",
+		surname: "Scott",
+	},
+	{
+		id: "18",
+		name: "Peter",
+		surname: "Green",
+	},
+	{
+		id: "19",
+		name: "Quinn",
+		surname: "Baker",
+	},
+	{
+		id: "20",
+		name: "Rachel",
+		surname: "Adams",
+	},
+	{
+		id: "21",
+		name: "Sam",
+		surname: "Parker",
+	},
+	{
+		id: "22",
+		name: "Tina",
+		surname: "Evans",
+	},
+	{
+		id: "23",
+		name: "Ulysses",
+		surname: "Morris",
+	},
+	{
+		id: "24",
+		name: "Violet",
+		surname: "Butler",
+	},
+	{
+		id: "25",
+		name: "William",
+		surname: "Ward",
+	},
+	{
+		id: "26",
+		name: "Xavier",
+		surname: "Cole",
+	},
+	{
+		id: "27",
+		name: "Yvonne",
+		surname: "Garcia",
+	},
+	{
+		id: "28",
+		name: "Zach",
+		surname: "Hall",
+	},
 ];
 export const Subjects: Subject[] = [
 	{
@@ -29,7 +149,22 @@ export const Subjects: Subject[] = [
 		name: "English 101",
 		startingDate: "2021-01-01",
 		endDate: "2021-01-31",
-		students: [Students[0], Students[1], Students[2], Students[3]],
+		students: [
+			Students[0],
+			Students[1],
+			Students[2],
+			Students[3],
+			Students[4],
+			Students[5],
+			Students[6],
+			Students[7],
+			Students[8],
+			Students[9],
+			Students[10],
+			Students[11],
+			Students[12],
+			Students[13],
+		],
 	},
 	{
 		id: "2",

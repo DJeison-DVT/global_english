@@ -18,3 +18,9 @@ export interface Subject {
 	endDate: string;
 	students: Student[];
 }
+
+export type Assistance = {
+	student: Student;
+	assisted: boolean;
+	class: Class;
+};

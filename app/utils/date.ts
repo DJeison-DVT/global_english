@@ -13,7 +13,12 @@ function formatDate(date: string) {
 }
 
 function formatDateLong(date: string) {
-	const dateObj = new Date(date);
+	// format date string YYYY-MM-DD to MMMM DD, YYYY
+	const dateComponents = date.split("-");
+	const dateFormatted = new Date(
+		dateComponents[1] + "-" + dateComponents[2] + "-" + dateComponents[0]
+	);
+	const dateObj = new Date(dateFormatted);
 	return dateObj
 		.toLocaleDateString("es-ES", {
 			weekday: "long",
