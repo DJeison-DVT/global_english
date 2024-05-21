@@ -1,4 +1,10 @@
-import { Student, Subject, Class, Assistance } from "@/app/types/types";
+import {
+	Student,
+	Subject,
+	Class,
+	Assistance,
+	Weekdays,
+} from "@/app/types/types";
 
 const Students: Student[] = [
 	{
@@ -149,6 +155,7 @@ export const Subjects: Subject[] = [
 		name: "English 101",
 		startingDate: "2021-01-01",
 		endDate: "2021-01-31",
+		weekdays: [Weekdays.Monday, Weekdays.Wednesday, Weekdays.Friday],
 		students: [
 			Students[0],
 			Students[1],
@@ -172,6 +179,7 @@ export const Subjects: Subject[] = [
 		name: "English 201",
 		startingDate: "2021-02-01",
 		endDate: "2021-02-28",
+		weekdays: [Weekdays.Tuesday, Weekdays.Thursday],
 		students: [Students[0], Students[1], Students[2], Students[3]],
 	},
 	{
@@ -180,18 +188,8 @@ export const Subjects: Subject[] = [
 		name: "English 301",
 		startingDate: "2021-03-01",
 		endDate: "2021-03-31",
-		students: [
-			{
-				id: "1",
-				name: "Name 1",
-				surname: "Surname 1",
-			},
-			{
-				id: "2",
-				name: "Name 2",
-				surname: "Surname 2",
-			},
-		],
+		weekdays: [Weekdays.Monday, Weekdays.Wednesday, Weekdays.Friday],
+		students: [Students[0], Students[1]],
 	},
 	{
 		id: "4",
@@ -199,7 +197,8 @@ export const Subjects: Subject[] = [
 		name: "English 401",
 		startingDate: "2021-04-01",
 		endDate: "2021-04-30",
-		students: [],
+		weekdays: [Weekdays.Tuesday, Weekdays.Thursday],
+		students: [Students[0], Students[1]],
 	},
 	{
 		id: "5",
@@ -207,6 +206,7 @@ export const Subjects: Subject[] = [
 		name: "English 501",
 		startingDate: "2021-05-01",
 		endDate: "2021-05-31",
+		weekdays: [Weekdays.Monday, Weekdays.Wednesday, Weekdays.Friday],
 		students: [],
 	},
 ];

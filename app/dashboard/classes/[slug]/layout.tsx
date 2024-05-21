@@ -2,7 +2,6 @@ import React from "react";
 import Header from "@/app/components/Header";
 import Sidebar from "./components/Sidebar";
 import { Subjects } from "@/app/utils/consts";
-import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface DashboardLayoutProps {
 	children: React.ReactNode;

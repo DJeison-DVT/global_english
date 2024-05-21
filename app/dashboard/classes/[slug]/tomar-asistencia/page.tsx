@@ -31,18 +31,20 @@ const DayAssistance: React.FC = () => {
 		<Table>
 			<TableHeader>
 				<TableRow>
-					<TableHead>Nombre</TableHead>
-					<TableHead>Asistió</TableHead>
+					<TableHead>No</TableHead>
+					<TableHead className='w-full'>Nombre</TableHead>
+					<TableHead className='text-center'>Asistió</TableHead>
 				</TableRow>
 			</TableHeader>
 			<TableBody>
-				{students.map((student) => (
+				{students.map((student, idx) => (
 					<TableRow key={student.id} className='h-[55px]'>
+						<TableCell>{idx}</TableCell>
 						<TableCell className=''>
 							{student.name} {student.surname}
 						</TableCell>
-						<TableCell className=''>
-							<Checkbox />
+						<TableCell className='flex justify-center items-center'>
+							<Checkbox className='h-8 w-8' />
 						</TableCell>
 					</TableRow>
 				))}
@@ -81,10 +83,7 @@ export default function Page() {
 		<div className='flex flex-col w-full'>
 			<Select
 				value={selectedDate}
-				onValueChange={(value) => {
-					setSelectedDate(value);
-					console.log(value);
-				}}
+				onValueChange={(value) => setSelectedDate(value)}
 			>
 				<SelectTrigger className='w-[250px] bg-[#d9d9d9]'>
 					<SelectValue

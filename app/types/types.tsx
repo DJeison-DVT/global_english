@@ -10,6 +10,14 @@ export interface Class {
 	Subject: Subject;
 }
 
+export enum Weekdays {
+	Monday = 0,
+	Tuesday,
+	Wednesday,
+	Thursday,
+	Friday,
+}
+
 export interface Subject {
 	id: string;
 	company: string;
@@ -17,6 +25,7 @@ export interface Subject {
 	startingDate: string;
 	endDate: string;
 	students: Student[];
+	weekdays: Weekdays[];
 }
 
 export type Assistance = {

@@ -21,6 +21,7 @@ bun dev
 
 ## To-do's
 
+- Weekly view of assistance
 - Data Table view for assistance checking
 - Auth
 - Admin view
