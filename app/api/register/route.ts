@@ -1,7 +1,8 @@
-import generateToken from "@/app/utils/authHelpers";
 import { UserCreation } from "@/lib/zod";
-import prisma from "@/prisma/db";
 import { hash } from "bcryptjs";
+import { cookies } from "next/headers";
+import prisma from "@/prisma/db";
+import generateToken from "@/app/utils/authHelpers";
 
 export async function POST(request: Request) {
 	try {
@@ -36,7 +37,13 @@ export async function POST(request: Request) {
 		}
 
 		const token = generateToken(user.id, user.username, user.role);
-		return new Response(JSON.stringify(user), { status: 201 });
+		const response = new Response(JSON.stringify(user), { status: 201 });
+		response.headers.set(
+			"Set-Cookie",
+			`token=${token}; Path=/; HttpOnly; Secure; SameSite=Strict;`
+		);
+
+		return response;
 	} catch (error) {
 		return new Response("Error creating user", { status: 500 });
 	}

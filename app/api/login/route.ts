@@ -27,7 +27,13 @@ export async function POST(request: Request) {
 
 		// Generate token
 		const token = generateToken(user.id, user.username, user.role);
-		return new Response(JSON.stringify({ token }), { status: 200 });
+		const response = new Response(JSON.stringify(user), { status: 201 });
+		response.headers.set(
+			"Set-Cookie",
+			`token=${token}; Path=/; HttpOnly; Secure; SameSite=Strict;`
+		);
+
+		return response;
 	} catch (error) {
 		return new Response("Error logging in", { status: 500 });
 	}

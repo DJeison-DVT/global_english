@@ -7,7 +7,7 @@ export default function generateToken(
 	username: string,
 	role: string
 ) {
-	const token = jwt.sign({ userId: id, username, role }, JWT_SECRET, {
+	return jwt.sign({ userId: id, username, role }, JWT_SECRET, {
 		expiresIn: "3h",
 	});
 }
