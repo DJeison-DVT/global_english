@@ -1,4 +1,5 @@
-import UserCreation from "@/lib/zod";
+import generateToken from "@/app/utils/authHelpers";
+import { UserCreation } from "@/lib/zod";
 import prisma from "@/prisma/db";
 import { hash } from "bcryptjs";
 
@@ -31,9 +32,10 @@ export async function POST(request: Request) {
 				},
 			});
 		} catch (error) {
-			console.log(error);
 			return new Response("Error creating user", { status: 500 });
 		}
+
+		const token = generateToken(user.id, user.username, user.role);
 		return new Response(JSON.stringify(user), { status: 201 });
 	} catch (error) {
 		return new Response("Error creating user", { status: 500 });
