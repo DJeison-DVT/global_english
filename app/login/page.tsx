@@ -24,7 +24,7 @@ export default async function Page() {
 					if (response && response.status === 201) {
 						redirect("/dashboard");
 					} else {
-						console.error("Error logging in");
+						console.error("received error from login API");
 					}
 				}}
 			>

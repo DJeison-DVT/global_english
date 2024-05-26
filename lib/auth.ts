@@ -14,7 +14,7 @@ export async function login(formData: FormData) {
 	});
 
 	if (response.status !== 201) {
-		throw new Error("Error logging in");
+		throw new Error("Failed to login");
 	}
 	try {
 		const { userId, username: user, role } = await response.json();
@@ -27,7 +27,7 @@ export async function login(formData: FormData) {
 			sameSite: "strict",
 		});
 	} catch (error) {
-		throw new Error("Error logging in");
+		throw new Error("Failed to generate token");
 	}
 
 	return response;
