@@ -1,12 +1,13 @@
 import { compare } from "bcryptjs";
 import { User } from "@/lib/zod";
 import prisma from "@/prisma/db";
-import generateToken from "@/app/utils/authHelpers";
+import { generateToken } from "@/app/utils/authHelpers";
 
 export async function POST(request: Request) {
 	try {
 		// Input validation
 		const { username, password } = await request.json();
+		console.log(username, password);
 		try {
 			User.parse({ username, password });
 		} catch (error) {
@@ -25,14 +26,7 @@ export async function POST(request: Request) {
 			return new Response("Invalid password", { status: 400 });
 		}
 
-		// Generate token
-		const token = generateToken(user.id, user.username, user.role);
 		const response = new Response(JSON.stringify(user), { status: 201 });
-		response.headers.set(
-			"Set-Cookie",
-			`token=${token}; Path=/; HttpOnly; Secure; SameSite=Strict;`
-		);
-
 		return response;
 	} catch (error) {
 		return new Response("Error logging in", { status: 500 });
