@@ -14,7 +14,7 @@ export async function login(formData: FormData) {
 	});
 
 	if (response.status !== 201) {
-		throw new Error("Error logging in");
+		throw new Error(response.statusText);
 	}
 	try {
 		const { userId, username: user, role } = await response.json();
