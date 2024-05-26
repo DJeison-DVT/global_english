@@ -6,7 +6,6 @@ export async function POST(request: Request) {
 	try {
 		// Input validation
 		const { username, password } = await request.json();
-		console.log(username, password);
 		try {
 			User.parse({ username, password });
 		} catch (error) {
@@ -28,6 +27,6 @@ export async function POST(request: Request) {
 		const response = new Response(JSON.stringify(user), { status: 201 });
 		return response;
 	} catch (error) {
-		return new Response("Error logging in", { status: 500 });
+		return new Response("Server API Error, login", { status: 500 });
 	}
 }
