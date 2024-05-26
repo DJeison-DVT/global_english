@@ -1,11 +1,13 @@
 import { Token, decrypt, generateToken } from "@/app/utils/authHelpers";
 import { cookies } from "next/headers";
 
+const BASE_URL = process.env.VERCEL_URL || process.env.BASE_URL;
+
 export async function login(formData: FormData) {
 	const username = formData.get("username") as string;
 	const password = formData.get("password") as string;
 
-	const response = await fetch("http://localhost:3000/api/login", {
+	const response = await fetch(`${BASE_URL}/api/login`, {
 		method: "POST",
 		body: JSON.stringify({ username, password }),
 	});
@@ -31,7 +33,7 @@ export async function login(formData: FormData) {
 }
 
 export async function register(formData: FormData) {
-	await fetch("/api/register", {
+	await fetch(`${BASE_URL}/api/register`, {
 		method: "POST",
 		body: formData,
 	});

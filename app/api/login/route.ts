@@ -1,7 +1,6 @@
 import { compare } from "bcryptjs";
 import { User } from "@/lib/zod";
 import prisma from "@/prisma/db";
-import { generateToken } from "@/app/utils/authHelpers";
 
 export async function POST(request: Request) {
 	try {
