@@ -9,6 +9,8 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { User } from "react-feather";
+import { getSession } from "@/lib/auth";
+import { Token } from "../utils/authHelpers";
 
 interface HeaderProps {
 	titles: string[];
@@ -49,12 +51,18 @@ function renderBreadcrumb(titles: string[], links: string[]) {
 	}
 }
 
-export default function Header({ titles, links }: HeaderProps) {
+export default async function Header({ titles, links }: HeaderProps) {
+	const token = await getSession();
 	return (
 		<div className='my-3'>
 			<div className='flex justify-between'>
 				{renderBreadcrumb(titles, links)}
 				<div className='flex items-center'>
+					<div>
+						{token && (
+							<div className='text-sm font-semibold'>{token.username}</div>
+						)}
+					</div>
 					<Avatar>
 						<AvatarImage src='https://github.com/shadcn.png' />
 						<AvatarFallback>

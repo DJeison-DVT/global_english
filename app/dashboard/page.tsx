@@ -6,7 +6,7 @@ import Header from "../components/Header";
 // Change from dummy data to real data
 import { Subjects } from "@/app/utils/consts";
 
-function dashboard() {
+export default function dashboard() {
 	return (
 		<div className='flex-1 bg-secondary'>
 			<div className='mx-24'>
@@ -22,5 +22,3 @@ function dashboard() {
 		</div>
 	);
 }
-
-export default dashboard;
