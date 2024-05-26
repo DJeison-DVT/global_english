@@ -14,6 +14,7 @@ export async function login(formData: FormData) {
 	});
 
 	if (response.status !== 201) {
+		console.log(response.status);
 		throw new Error(response.statusText);
 	}
 	try {
