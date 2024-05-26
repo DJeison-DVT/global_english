@@ -24,5 +24,6 @@ export function URLBuilder(url: string) {
 		}
 	}
 
+	console.log(URL);
 	return URL;
 }
