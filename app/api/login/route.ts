@@ -5,13 +5,16 @@ import prisma from "@/prisma/db";
 export async function POST(request: Request) {
 	try {
 		// Input validation
+		console.log("Processing request");
 		const { username, password } = await request.json();
+		console.log("Request processed");
 		try {
 			User.parse({ username, password });
 		} catch (error) {
 			return new Response("Incorrect input", { status: 400 });
 		}
 
+		console.log("Input validated and user found");
 		// Authentication
 		const user = await prisma.user.findUnique({
 			where: { username },
