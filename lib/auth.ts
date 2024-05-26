@@ -1,5 +1,6 @@
 import { Token, decrypt, generateToken } from "@/app/utils/authHelpers";
 import { cookies } from "next/headers";
+import { URLBuilder } from "./utils";
 
 const BASE_URL = process.env.VERCEL_URL || process.env.BASE_URL;
 
@@ -7,7 +8,7 @@ export async function login(formData: FormData) {
 	const username = formData.get("username") as string;
 	const password = formData.get("password") as string;
 
-	const response = await fetch(`${BASE_URL}/api/login`, {
+	const response = await fetch(URLBuilder("/api/login"), {
 		method: "POST",
 		body: JSON.stringify({ username, password }),
 	});
@@ -33,7 +34,7 @@ export async function login(formData: FormData) {
 }
 
 export async function register(formData: FormData) {
-	await fetch(`${BASE_URL}/api/register`, {
+	await fetch(URLBuilder("/api/register"), {
 		method: "POST",
 		body: formData,
 	});
