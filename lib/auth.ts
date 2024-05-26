@@ -2,8 +2,6 @@ import { Token, decrypt, generateToken } from "@/app/utils/authHelpers";
 import { cookies } from "next/headers";
 import { URLBuilder } from "./utils";
 
-const BASE_URL = process.env.VERCEL_URL || process.env.BASE_URL;
-
 export async function login(formData: FormData) {
 	const username = formData.get("username") as string;
 	const password = formData.get("password") as string;
