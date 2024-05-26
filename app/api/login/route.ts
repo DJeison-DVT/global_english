@@ -27,6 +27,7 @@ export async function POST(request: Request) {
 		const response = new Response(JSON.stringify(user), { status: 201 });
 		return response;
 	} catch (error) {
+		console.log("Couldn't process request", error);
 		return new Response("Server API Error, login", { status: 500 });
 	}
 }
