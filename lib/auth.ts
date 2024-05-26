@@ -1,4 +1,4 @@
-import { decrypt, generateToken } from "@/app/utils/authHelpers";
+import { Token, decrypt, generateToken } from "@/app/utils/authHelpers";
 import { cookies } from "next/headers";
 
 export async function login(formData: FormData) {
@@ -21,6 +21,7 @@ export async function login(formData: FormData) {
 			secure: true,
 			httpOnly: true,
 			path: "/",
+			sameSite: "strict",
 		});
 	} catch (error) {
 		throw new Error("Error logging in");
@@ -39,5 +40,5 @@ export async function register(formData: FormData) {
 export async function getSession() {
 	const session = cookies().get("session")?.value;
 	if (!session) return null;
-	return decrypt(session);
+	return decrypt(session) as Token;
 }
