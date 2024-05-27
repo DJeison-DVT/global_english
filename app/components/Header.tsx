@@ -6,7 +6,6 @@ import {
 	BreadcrumbList,
 	BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { User } from "react-feather";
 import { getSession } from "@/lib/auth";
@@ -57,20 +56,12 @@ export default async function Header({ titles, links }: HeaderProps) {
 		<div className='my-3'>
 			<div className='flex justify-between'>
 				{renderBreadcrumb(titles, links)}
-				<div className='flex items-center'>
+				<div className='flex items-center gap-3'>
 					<div>
 						{token && (
 							<div className='text-sm font-semibold'>{token.username}</div>
 						)}
 					</div>
-					<Avatar>
-						<AvatarImage src='https://github.com/shadcn.png' />
-						<AvatarFallback>
-							<div className='bg-[#d9d9d9] w-full flex items-center justify-center h-full'>
-								<User />
-							</div>
-						</AvatarFallback>
-					</Avatar>
 				</div>
 			</div>
 			<Separator />

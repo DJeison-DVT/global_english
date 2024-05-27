@@ -5,14 +5,14 @@ import { Subjects } from "@/app/utils/consts";
 
 interface DashboardLayoutProps {
 	children: React.ReactNode;
-	params: { slug: string };
+	params: { id: string };
 }
 
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 	children,
 	params,
 }) => {
-	const classData = Subjects.find((subject) => subject.id === params.slug) || {
+	const classData = Subjects.find((subject) => subject.id === params.id) || {
 		company: "",
 	};
 
@@ -21,11 +21,11 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 			<div className='mx-24 h-screen w-full '>
 				<Header
 					titles={["Clases", classData.company]}
-					links={["/dashboard", `/dashboard/classes/${params.slug}`]}
+					links={["/dashboard", `/dashboard/classes/${params.id}`]}
 				/>
 				<div className='h-[calc(100%-120px)] flex'>
 					<div className='flex-none mr-14'>
-						<Sidebar classId={params.slug} />
+						<Sidebar classId={params.id} />
 					</div>
 					{children}
 				</div>
