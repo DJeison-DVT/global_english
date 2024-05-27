@@ -16,6 +16,14 @@ export async function GET(request: Request) {
 
 		const users = await prisma.user.findMany({
 			where: role ? { role } : {},
+			select: {
+				id: true,
+				username: true,
+				role: true,
+				Course: true,
+				surname: true,
+				name: true,
+			},
 		});
 
 		return new Response(JSON.stringify(users), { status: 200 });
