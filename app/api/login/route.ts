@@ -1,5 +1,5 @@
 import { compare } from "bcryptjs";
-import { User } from "@/lib/zod";
+import { UserSchema } from "@/lib/zod";
 import prisma from "@/prisma/db";
 
 export async function POST(request: Request) {
@@ -9,7 +9,7 @@ export async function POST(request: Request) {
 		const { username, password } = await request.json();
 		console.log("Request processed");
 		try {
-			User.parse({ username, password });
+			UserSchema.parse({ username, password });
 		} catch (error) {
 			return new Response("Incorrect input", { status: 400 });
 		}

@@ -35,10 +35,8 @@ model Course {
   companyId    Int
   professorId  Int
   startingDate DateTime
-  startingHour String
   endingDate   DateTime
-  endingHour   String
-  level        Level
+  level        Level?
   company      Company    @relation(fields: [companyId], references: [id])
   professor    User       @relation(fields: [professorId], references: [id])
   students     Student[]
@@ -48,8 +46,7 @@ model Course {
 
 model Student {
   id       Int        @id @default(autoincrement())
-  name     String
-  surname  String
+  fullname String
   Course   Course     @relation(fields: [courseId], references: [id])
   courseId Int
   Attended Attended[]

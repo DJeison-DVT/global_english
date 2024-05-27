@@ -1,4 +1,4 @@
-import { UserCreation } from "@/lib/zod";
+import { UserCreationSchema } from "@/lib/zod";
 import { hash } from "bcryptjs";
 import prisma from "@/prisma/db";
 
@@ -11,7 +11,7 @@ export async function POST(request: Request) {
 			});
 		}
 		try {
-			UserCreation.parse({ username, password, name, surname, role });
+			UserCreationSchema.parse({ username, password, name, surname, role });
 		} catch (error) {
 			return new Response("Incorrect input", { status: 400 });
 		}
