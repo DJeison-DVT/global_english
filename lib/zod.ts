@@ -24,8 +24,10 @@ const CourseSchema = z.object({
 	name: z.string().min(3).max(255),
 	companyId: z.number(),
 	professorId: z.number(),
-	startingDate: z.date(),
-	endingDate: z.date(),
+	dateRange: z.object({
+		from: z.date(),
+		to: z.date(),
+	}),
 	level: z.enum(["BEGINNER", "INTERMEDIATE", "ADVANCED"]),
 	weekdays: z.array(
 		z.enum([
@@ -40,4 +42,10 @@ const CourseSchema = z.object({
 	),
 });
 
-export { UserSchema, UserCreationSchema };
+export {
+	UserSchema,
+	UserCreationSchema,
+	CourseSchema,
+	CompanySchema,
+	StudentSchema,
+};

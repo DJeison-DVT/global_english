@@ -2,6 +2,10 @@ function capitalize(string: string) {
 	return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
+function formatDateToShort(date: Date) {
+	return date.toLocaleDateString("es-ES", { month: "short", day: "numeric" });
+}
+
 function formatDate(date: string, longMonth?: boolean, hideYear?: boolean) {
 	const dateObj = new Date(date);
 	const option = longMonth ? "long" : "short";
@@ -68,4 +72,4 @@ function showMonths(date: Date) {
 	}
 }
 
-export { showMonths, formatDate, formatDateLong };
+export { showMonths, formatDate, formatDateLong, formatDateToShort };

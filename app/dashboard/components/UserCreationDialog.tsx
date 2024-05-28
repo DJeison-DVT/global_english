@@ -35,6 +35,9 @@ export default function UserCreationDialog() {
 
 	const form = useForm<z.infer<typeof UserCreationSchema>>({
 		resolver: zodResolver(UserCreationSchema),
+		defaultValues: {
+			role: "USER",
+		},
 	});
 
 	function onSubmit(data: z.infer<typeof UserCreationSchema>) {
