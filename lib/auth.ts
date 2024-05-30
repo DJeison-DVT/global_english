@@ -1,6 +1,10 @@
+"use server";
+
 import { Token, decrypt, generateToken } from "@/app/utils/authHelpers";
 import { cookies } from "next/headers";
 import { URLBuilder } from "./utils";
+import { z } from "zod";
+import { UserCreationSchema } from "./zod";
 
 export async function login(formData: FormData) {
 	const username = formData.get("username") as string;
@@ -32,10 +36,11 @@ export async function login(formData: FormData) {
 	return response;
 }
 
-export async function register(formData: FormData) {
+export async function register(formData: z.infer<typeof UserCreationSchema>) {
+	const { username, password, role, name, surname } = formData;
 	await fetch(URLBuilder("/api/register"), {
 		method: "POST",
-		body: formData,
+		body: JSON.stringify({ username, password, role, name, surname }),
 	});
 }
 

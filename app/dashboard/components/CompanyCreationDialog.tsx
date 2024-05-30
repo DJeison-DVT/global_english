@@ -19,23 +19,34 @@ import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 import { CompanySchema } from "@/lib/zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Company } from "@prisma/client";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-export default function CompanyCreationDialog() {
+interface CompanyCreationDialogProps {
+	onCompanyCreated: () => void;
+}
+
+export default function CompanyCreationDialog({
+	onCompanyCreated,
+}: CompanyCreationDialogProps) {
 	const [open, setOpen] = useState(false);
 	const [disabled, setDisabled] = useState(false);
 
 	const form = useForm<z.infer<typeof CompanySchema>>({
 		resolver: zodResolver(CompanySchema),
+		defaultValues: {
+			name: "",
+		},
 	});
 
-	function onSubmit(data: z.infer<typeof CompanySchema>) {
+	const onSubmit = async (data: z.infer<typeof CompanySchema>) => {
 		setDisabled(true);
 
 		try {
-			createCompany(data);
+			await createCompany(data);
+			onCompanyCreated();
 		} catch (error) {
 			toast({
 				title: "Error creando la compañia",
@@ -49,12 +60,12 @@ export default function CompanyCreationDialog() {
 
 		setDisabled(false);
 		setOpen(false);
-	}
+	};
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogTrigger asChild>
-				<Button variant='outline'>Crear Usuario</Button>
+				<Button variant='outline'>Crear compañia</Button>
 			</DialogTrigger>
 			<DialogContent className='sm:max-w-md'>
 				<DialogHeader>

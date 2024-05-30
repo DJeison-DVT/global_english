@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import {
 	Dialog,
 	DialogContent,
-	DialogDescription,
 	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
@@ -12,7 +11,6 @@ import {
 import {
 	Form,
 	FormControl,
-	FormDescription,
 	FormField,
 	FormItem,
 	FormLabel,
@@ -34,7 +32,7 @@ import {
 } from "@/components/ui/popover";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { toast } from "@/components/ui/use-toast";
-import { CourseSchema, StudentSchema, CompanySchema } from "@/lib/zod";
+import { CourseSchema } from "@/lib/zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -42,7 +40,6 @@ import { z } from "zod";
 import { CalendarIcon, Check, ChevronsUpDown } from "lucide-react";
 import { addDays, format, set } from "date-fns";
 import { formatDateToShort } from "@/app/utils/date";
-import { getProfessorUsers } from "@/app/utils/api/users";
 import {
 	Command,
 	CommandEmpty,
@@ -52,11 +49,27 @@ import {
 	CommandList,
 } from "@/components/ui/command";
 import { Company, User } from "@prisma/client";
+import UserCreationDialog from "./UserCreationDialog";
+import CompanyCreationDialog from "./CompanyCreationDialog";
 
-export default function ClassCreationDialog() {
-	const [open, setOpen] = useState(false);
+interface ClassCreationDialogProps {
+	users: User[];
+	companies: Company[];
+	onClassCreated: () => void;
+	onUserCreated: () => void;
+	onCompanyCreated: () => void;
+}
+
+export default function ClassCreationDialog({
+	users,
+	companies,
+	onClassCreated,
+	onUserCreated,
+	onCompanyCreated,
+}: ClassCreationDialogProps) {
+	const [disabled, setDisabled] = useState(false);
+	const [openClass, setClassOpen] = useState(false);
 	const [professors, setProfessors] = useState<User[]>([]);
-	const [companies, setCompanies] = useState<Company[]>([]);
 
 	function userFullname(user: User) {
 		return `${user.name} ${user.surname}`;
@@ -73,7 +86,7 @@ export default function ClassCreationDialog() {
 	});
 
 	function onSubmit(data: z.infer<typeof CourseSchema>) {
-		console.log(data);
+		setDisabled(true);
 		toast({
 			title: "You submitted the following values:",
 			description: (
@@ -82,26 +95,19 @@ export default function ClassCreationDialog() {
 				</pre>
 			),
 		});
-		setOpen(false);
+
+		onClassCreated();
+		setDisabled(false);
+		setClassOpen(false);
 	}
 
-	const fetchProfessors = async () => {
-		const professors = await getProfessorUsers();
-		setProfessors(professors);
-	};
-
-	const fetchCompanies = async () => {
-		const companies = await getAllCompanies();
-		setCompanies(companies);
-	};
-
 	useEffect(() => {
-		fetchProfessors();
-		fetchCompanies();
-	}, []);
+		const professors = users.filter((user) => user.role === "USER");
+		setProfessors(professors);
+	}, [users]);
 
 	return (
-		<Dialog open={open} onOpenChange={setOpen}>
+		<Dialog open={openClass} onOpenChange={setClassOpen}>
 			<DialogTrigger asChild>
 				<Button variant='outline'>Crear Clase</Button>
 			</DialogTrigger>
@@ -117,6 +123,7 @@ export default function ClassCreationDialog() {
 						<FormField
 							control={form.control}
 							name='name'
+							defaultValue=''
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>Nombre de la clase</FormLabel>
@@ -159,7 +166,9 @@ export default function ClassCreationDialog() {
 													<CommandInput placeholder='Buscar profesor...' />
 													<CommandList>
 														<CommandEmpty>
-															No se encontraron profesores.
+															<UserCreationDialog
+																onUserCreated={onUserCreated}
+															/>
 														</CommandEmpty>
 														<CommandGroup>
 															{professors.map((prof) => (
@@ -190,10 +199,10 @@ export default function ClassCreationDialog() {
 						{companies.length > 0 && (
 							<FormField
 								control={form.control}
-								name='professorId'
+								name='companyId'
 								render={({ field }) => (
 									<FormItem className='flex flex-col'>
-										<FormLabel>Profesor</FormLabel>
+										<FormLabel>Compañía</FormLabel>
 										<Popover>
 											<PopoverTrigger asChild>
 												<FormControl>
@@ -205,12 +214,10 @@ export default function ClassCreationDialog() {
 													>
 														<div className='flex justify-between w-full'>
 															{field.value
-																? userFullname(
-																		professors.find(
-																			(prof) => prof.id === field.value
-																		)!
-																  )
-																: "Selecciona un profesor"}
+																? companies.find(
+																		(corp) => corp.id === field.value
+																  )?.name
+																: "Selecciona una compañía"}
 															<ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
 														</div>
 													</Button>
@@ -218,25 +225,27 @@ export default function ClassCreationDialog() {
 											</PopoverTrigger>
 											<PopoverContent className='w-[200px] p-0'>
 												<Command>
-													<CommandInput placeholder='Buscar profesor...' />
+													<CommandInput placeholder='Buscar compañía...' />
 													<CommandList>
 														<CommandEmpty>
-															No se encontraron profesores.
+															<CompanyCreationDialog
+																onCompanyCreated={onCompanyCreated}
+															/>
 														</CommandEmpty>
 														<CommandGroup>
-															{professors.map((prof) => (
+															{companies.map((corp) => (
 																<CommandItem
-																	value={userFullname(prof)}
-																	key={prof.id}
+																	value={corp.name}
+																	key={corp.id}
 																	onSelect={() => {
-																		form.setValue("professorId", prof.id);
+																		form.setValue("companyId", corp.id);
 																	}}
 																>
 																	<Check
 																		className={`mr-2 h-4 w-4
-																	${prof.id === field.value ? "opacity-100" : "opacity-0"}`}
+																	${corp.id === field.value ? "opacity-100" : "opacity-0"}`}
 																	/>
-																	{userFullname(prof)}
+																	{corp.name}
 																</CommandItem>
 															))}
 														</CommandGroup>
@@ -345,7 +354,9 @@ export default function ClassCreationDialog() {
 								</FormItem>
 							)}
 						/>
-						<Button type='submit'>Crear</Button>
+						<Button disabled={disabled} type='submit'>
+							Crear
+						</Button>
 					</form>
 				</Form>
 			</DialogContent>

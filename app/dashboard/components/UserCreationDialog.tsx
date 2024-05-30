@@ -24,14 +24,22 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { toast } from "@/components/ui/use-toast";
+import { register } from "@/lib/auth";
 import { UserCreationSchema } from "@/lib/zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-export default function UserCreationDialog() {
+interface UserCreationDialogProps {
+	onUserCreated: () => void;
+}
+
+export default function UserCreationDialog({
+	onUserCreated,
+}: UserCreationDialogProps) {
 	const [open, setOpen] = useState(false);
+	const [disabled, setDisabled] = useState(false);
 
 	const form = useForm<z.infer<typeof UserCreationSchema>>({
 		resolver: zodResolver(UserCreationSchema),
@@ -40,17 +48,26 @@ export default function UserCreationDialog() {
 		},
 	});
 
-	function onSubmit(data: z.infer<typeof UserCreationSchema>) {
+	const onSubmit = async (data: z.infer<typeof UserCreationSchema>) => {
+		setDisabled(true);
+
+		try {
+			await register(data);
+			onUserCreated();
+		} catch (error) {
+			toast({
+				title: "Error creando el usuario",
+			});
+			setDisabled(false);
+			return;
+		}
 		toast({
-			title: "You submitted the following values:",
-			description: (
-				<pre className='mt-2 w-[340px] rounded-md bg-slate-950 p-4'>
-					<code className='text-white'>{JSON.stringify(data, null, 2)}</code>
-				</pre>
-			),
+			title: `El usuario ${data.username} ha sido creado con exito`,
 		});
+
+		setDisabled(false);
 		setOpen(false);
-	}
+	};
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
@@ -130,7 +147,7 @@ export default function UserCreationDialog() {
 							name='role'
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Email</FormLabel>
+									<FormLabel>Rol</FormLabel>
 									<Select onValueChange={field.onChange} defaultValue='USER'>
 										<FormControl>
 											<SelectTrigger>
@@ -146,7 +163,9 @@ export default function UserCreationDialog() {
 								</FormItem>
 							)}
 						/>
-						<Button type='submit'>Submit</Button>
+						<Button disabled={disabled} type='submit'>
+							Submit
+						</Button>
 					</form>
 				</Form>
 			</DialogContent>
