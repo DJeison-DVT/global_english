@@ -98,6 +98,12 @@ export default function ClassCreationDialog({
 
 		onClassCreated();
 		setDisabled(false);
+		form.reset({
+			dateRange: {
+				from: new Date(),
+				to: addDays(new Date(), 7),
+			},
+		});
 		setClassOpen(false);
 	}
 
@@ -118,7 +124,7 @@ export default function ClassCreationDialog({
 				<Form {...form}>
 					<form
 						onSubmit={form.handleSubmit(onSubmit)}
-						className='flex flex-col gap-5'
+						className='grid grid-cols-2 gap-5'
 					>
 						<FormField
 							control={form.control}
@@ -137,7 +143,7 @@ export default function ClassCreationDialog({
 								control={form.control}
 								name='professorId'
 								render={({ field }) => (
-									<FormItem className='flex flex-col'>
+									<FormItem className='flex flex-col mt-2'>
 										<FormLabel>Profesor</FormLabel>
 										<Popover>
 											<PopoverTrigger asChild>
@@ -145,7 +151,7 @@ export default function ClassCreationDialog({
 													<Button
 														variant='outline'
 														role='combobox'
-														className={`w-[200px] justify-between",
+														className={`w-full justify-between
 														${!field.value && "text-muted-foreground"}`}
 													>
 														<div className='flex justify-between w-full'>
@@ -196,6 +202,53 @@ export default function ClassCreationDialog({
 								)}
 							/>
 						)}
+						<FormField
+							control={form.control}
+							name='dateRange'
+							render={({ field }) => (
+								<FormItem className='flex flex-col'>
+									<FormLabel>Periodo</FormLabel>
+									<Popover modal={true}>
+										<PopoverTrigger asChild>
+											<Button
+												id='date'
+												variant='outline'
+												className={`w-full justify-start text-left font-normal
+											${!field.value.from && "text-muted-foreground"}`}
+											>
+												<CalendarIcon className='mr-2 h-4 w-4' />
+												{field.value.from ? (
+													field.value.to ? (
+														<>
+															{formatDateToShort(field.value.from)} -{" "}
+															{formatDateToShort(field.value.to)}
+														</>
+													) : (
+														format(field.value.from, "LLL dd, y")
+													)
+												) : (
+													<span>Pick a date</span>
+												)}
+											</Button>
+										</PopoverTrigger>
+										<PopoverContent className='w-auto p-0' align='center'>
+											<Calendar
+												initialFocus
+												mode='range'
+												defaultMonth={field.value.from}
+												selected={{
+													from: field.value.from!,
+													to: field.value.to,
+												}}
+												onSelect={field.onChange}
+												numberOfMonths={2}
+											/>
+										</PopoverContent>
+									</Popover>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
 						{companies.length > 0 && (
 							<FormField
 								control={form.control}
@@ -209,7 +262,7 @@ export default function ClassCreationDialog({
 													<Button
 														variant='outline'
 														role='combobox'
-														className={`w-[200px] justify-between",
+														className={`w-full justify-between",
 														${!field.value && "text-muted-foreground"}`}
 													>
 														<div className='flex justify-between w-full'>
@@ -258,7 +311,29 @@ export default function ClassCreationDialog({
 								)}
 							/>
 						)}
-
+						<FormField
+							control={form.control}
+							name='weekdays'
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Días de la semana</FormLabel>
+									<ToggleGroup
+										size={"sm"}
+										type='multiple'
+										onValueChange={field.onChange}
+									>
+										<ToggleGroupItem value='Monday'>L</ToggleGroupItem>
+										<ToggleGroupItem value='Tuesday'>M</ToggleGroupItem>
+										<ToggleGroupItem value='Wednesday'>X</ToggleGroupItem>
+										<ToggleGroupItem value='Thursday'>J</ToggleGroupItem>
+										<ToggleGroupItem value='Friday'>V</ToggleGroupItem>
+										<ToggleGroupItem value='Saturday'>S</ToggleGroupItem>
+										<ToggleGroupItem value='Sunday'>D</ToggleGroupItem>
+									</ToggleGroup>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
 						<FormField
 							control={form.control}
 							name='level'
@@ -280,76 +355,6 @@ export default function ClassCreationDialog({
 											<SelectItem value='ADVANCED'>Avanzado</SelectItem>
 										</SelectContent>
 									</Select>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name='dateRange'
-							render={({ field }) => (
-								<FormItem className='flex flex-col'>
-									<FormLabel>Periodo</FormLabel>
-									<Popover modal={true}>
-										<PopoverTrigger asChild>
-											<Button
-												id='date'
-												variant='outline'
-												className={`w-full justify-start text-left font-normal
-											${!field.value.from && "text-muted-foreground"}`}
-											>
-												<CalendarIcon className='mr-2 h-4 w-4' />
-												{field.value.from ? (
-													field.value.to ? (
-														<>
-															{formatDateToShort(field.value.from)} -{" "}
-															{formatDateToShort(field.value.to)}
-														</>
-													) : (
-														format(field.value.from, "LLL dd, y")
-													)
-												) : (
-													<span>Pick a date</span>
-												)}
-											</Button>
-										</PopoverTrigger>
-										<PopoverContent className='w-auto p-0' align='center'>
-											<Calendar
-												initialFocus
-												mode='range'
-												defaultMonth={field.value.from}
-												selected={{
-													from: field.value.from!,
-													to: field.value.to,
-												}}
-												onSelect={field.onChange}
-												numberOfMonths={2}
-											/>
-										</PopoverContent>
-									</Popover>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name='weekdays'
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Días de la semana</FormLabel>
-									<ToggleGroup
-										size={"sm"}
-										type='multiple'
-										onValueChange={field.onChange}
-									>
-										<ToggleGroupItem value='Monday'>L</ToggleGroupItem>
-										<ToggleGroupItem value='Tuesday'>M</ToggleGroupItem>
-										<ToggleGroupItem value='Wednesday'>X</ToggleGroupItem>
-										<ToggleGroupItem value='Thursday'>J</ToggleGroupItem>
-										<ToggleGroupItem value='Friday'>V</ToggleGroupItem>
-										<ToggleGroupItem value='Saturday'>S</ToggleGroupItem>
-										<ToggleGroupItem value='Sunday'>D</ToggleGroupItem>
-									</ToggleGroup>
 									<FormMessage />
 								</FormItem>
 							)}

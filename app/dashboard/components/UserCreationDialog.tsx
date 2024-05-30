@@ -45,6 +45,10 @@ export default function UserCreationDialog({
 		resolver: zodResolver(UserCreationSchema),
 		defaultValues: {
 			role: "USER",
+			username: "",
+			password: "",
+			name: "",
+			surname: "",
 		},
 	});
 
@@ -148,7 +152,7 @@ export default function UserCreationDialog({
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>Rol</FormLabel>
-									<Select onValueChange={field.onChange} defaultValue='USER'>
+									<Select onValueChange={field.onChange}>
 										<FormControl>
 											<SelectTrigger>
 												<SelectValue />
