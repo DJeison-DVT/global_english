@@ -51,6 +51,7 @@ import {
 import { Company, User } from "@prisma/client";
 import UserCreationDialog from "./UserCreationDialog";
 import CompanyCreationDialog from "./CompanyCreationDialog";
+import { createClass } from "@/app/utils/api/classes";
 
 interface ClassCreationDialogProps {
 	users: User[];
@@ -85,27 +86,32 @@ export default function ClassCreationDialog({
 		resolver: zodResolver(CourseSchema),
 	});
 
-	function onSubmit(data: z.infer<typeof CourseSchema>) {
+	const onSubmit = async (data: z.infer<typeof CourseSchema>) => {
 		setDisabled(true);
-		toast({
-			title: "You submitted the following values:",
-			description: (
-				<pre className='mt-2 w-[340px] rounded-md bg-slate-950 p-4'>
-					<code className='text-white'>{JSON.stringify(data, null, 2)}</code>
-				</pre>
-			),
-		});
 
-		onClassCreated();
-		setDisabled(false);
+		try {
+			await createClass(data);
+			onClassCreated();
+		} catch (error) {
+			toast({
+				title: "Error creando la clase",
+			});
+			setDisabled(false);
+			return;
+		}
 		form.reset({
 			dateRange: {
 				from: new Date(),
 				to: addDays(new Date(), 7),
 			},
 		});
+		toast({
+			title: `La clase ${data.name} ha sido creada con exito`,
+		});
+
+		setDisabled(false);
 		setClassOpen(false);
-	}
+	};
 
 	useEffect(() => {
 		const professors = users.filter((user) => user.role === "USER");
