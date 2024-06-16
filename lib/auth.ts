@@ -49,3 +49,15 @@ export async function getSession() {
 	if (!session) return null;
 	return decrypt(session) as Token;
 }
+
+export async function logout() {
+	cookies().set("session", "", {
+		secure: true,
+		httpOnly: true,
+		path: "/",
+		sameSite: "strict",
+		expires: new Date(0),
+	});
+
+	return new Response(null, { status: 201 });
+}
