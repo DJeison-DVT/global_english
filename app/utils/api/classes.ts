@@ -1,3 +1,4 @@
+import { URLBuilder } from "@/lib/utils";
 import { CourseSchema } from "@/lib/zod";
 import { z } from "zod";
 
@@ -7,8 +8,14 @@ async function getAllClasses() {
 	return data;
 }
 
-async function getClassByUser(userId: number) {
-	const response = await fetch(`/api/class/${userId}`);
+async function getClassById(id: number) {
+	const response = await fetch(`/api/class/${id}`);
+	const data = await response.json();
+	return data;
+}
+
+async function getClassByUser(userId: string) {
+	const response = await fetch(URLBuilder(`/api/class/user/${userId}`));
 	const data = await response.json();
 	return data;
 }

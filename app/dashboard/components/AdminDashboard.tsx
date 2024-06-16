@@ -9,6 +9,7 @@ import { getAllCompanies } from "@/app/utils/api/companies";
 import { getAllClasses } from "@/app/utils/api/classes";
 import ClassCard from "./ClassCard";
 import UserCard from "./UserCard";
+import CompanyCard from "./CompanyCard";
 
 export default function AdminDashboard() {
 	const [users, setUsers] = useState<User[]>([]);
@@ -78,13 +79,19 @@ export default function AdminDashboard() {
 					</div>
 				</div>
 				<div className='flex flex-col m-3'>
-					<div className='flex flex-col flex-1'>
-						<div className='flex-1 w-fit flex flex-col gap-3'>
+					<div className='flex flex-col flex-1 w-fit'>
+						<div className='flex-1 w-full flex flex-col gap-3'>
+							<div className='text-xl'>Usuarios</div>
 							{users.map((user) => (
 								<UserCard key={user.id} user={user} />
 							))}
 						</div>
-						<div className='flex-1'>Companies</div>
+						<div className='flex-1 w-full flex flex-col gap-3'>
+							<div className='text-xl'>Empresas</div>
+							{companies.map((company) => (
+								<CompanyCard company={company} />
+							))}
+						</div>
 					</div>
 				</div>
 			</div>

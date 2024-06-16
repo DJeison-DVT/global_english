@@ -55,7 +55,7 @@ const DayAssistance: React.FC = () => {
 
 export default function Page() {
 	const { toast } = useToast();
-	const static_date = "2021-09-03";
+	const today = new Date().toISOString().split("T")[0];
 	const [selectedDate, setSelectedDate] = useState<string | undefined>(
 		undefined
 	);
@@ -71,10 +71,10 @@ export default function Page() {
 
 	function firstDayAfterStaticDate(dates: string[]) {
 		let index = 0;
-		if (dates.includes(static_date)) {
-			index = dates.findIndex((item) => item === static_date);
-		} else if (dates.some((item) => item > static_date)) {
-			index = dates.findIndex((item) => item > static_date);
+		if (dates.includes(today)) {
+			index = dates.findIndex((item) => item === today);
+		} else if (dates.some((item) => item > today)) {
+			index = dates.findIndex((item) => item > today);
 		}
 		return dates[index];
 	}

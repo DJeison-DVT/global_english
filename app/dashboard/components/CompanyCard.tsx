@@ -4,15 +4,13 @@ import {
 	TooltipProvider,
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { User } from "@prisma/client";
+import { Company } from "@prisma/client";
 import { Tool } from "react-feather";
 
-export default function UserCard({ user }: { user: User }) {
+export default function CompanyCard({ company }: { company: Company }) {
 	return (
 		<div className='flex w-full bg-background rounded-md p-2 justify-between gap-3'>
-			<div className='flex items-center'>
-				{user.name} {user.surname}
-			</div>
+			<div className='flex items-center'>{company.name}</div>
 			<TooltipProvider>
 				<Tooltip>
 					<TooltipTrigger>

@@ -9,10 +9,9 @@ import {
 import { Progress } from "@/components/ui/progress";
 import { classAssistance } from "@/app/utils/consts";
 import { formatDateLong } from "@/app/utils/date";
-import { viewProps } from "../page";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-export default function DailyView({ totalStudents }: viewProps) {
+export default function DailyView() {
 	return (
 		<ScrollArea className='w-full h-full '>
 			<Table>
@@ -31,10 +30,10 @@ export default function DailyView({ totalStudents }: viewProps) {
 							<TableCell className='flex'>
 								<Progress
 									className='mx-14'
-									value={(day.assisted.length / totalStudents) * 100}
+									value={(day.assisted.length / 5) * 100}
 								/>
 								<div className='text-nowrap '>
-									{day.assisted.length} / {totalStudents}
+									{day.assisted.length} / {5}
 								</div>
 							</TableCell>
 						</TableRow>

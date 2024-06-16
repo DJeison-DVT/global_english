@@ -7,9 +7,7 @@ import {
 	BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
-import { User } from "react-feather";
 import { getSession } from "@/lib/auth";
-import { Token } from "../utils/authHelpers";
 
 interface HeaderProps {
 	titles: string[];
@@ -52,6 +50,8 @@ function renderBreadcrumb(titles: string[], links: string[]) {
 
 export default async function Header({ titles, links }: HeaderProps) {
 	const token = await getSession();
+
+	console.log(titles, links);
 	return (
 		<div className='my-3'>
 			<div className='flex justify-between'>

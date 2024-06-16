@@ -9,10 +9,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
-import { classAssistance } from "@/app/utils/consts";
-import { viewProps } from "../page";
 import { showMonths } from "@/app/utils/date";
 import { ChevronLeft, ChevronRight } from "react-feather";
 import { Subjects } from "@/app/utils/consts";
@@ -28,7 +25,7 @@ const HoverButton: React.FC<HoverButtonProps> = ({ children }) => (
 	</button>
 );
 
-export default function WeeklyView({ totalStudents }: viewProps) {
+export default function WeeklyView() {
 	const [currentWeekStart, setCurrentWeekStart] = useState(new Date());
 	const [settingUp, setSettingUp] = useState(false);
 
