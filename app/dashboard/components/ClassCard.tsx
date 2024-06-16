@@ -34,7 +34,7 @@ const ClassCard: React.FC<ClassCardProps> = ({
 	const start = new Date(startingDate);
 	const end = new Date(endDate);
 	return (
-		<div className='w-80'>
+		<div className='w-80 h-fit transition-opacity duration-500 ease-in-out opacity-100'>
 			<div
 				onClick={handleClick}
 				className='hover:cursor-pointer text-2xl flex bg-white items-end h-20 rounded-t-lg'
