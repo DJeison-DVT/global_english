@@ -14,6 +14,7 @@ import { showMonths } from "@/app/utils/date";
 import { ChevronLeft, ChevronRight } from "react-feather";
 import { Subjects } from "@/app/utils/consts";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import Loading from "@/app/components/Loading";
 
 interface HoverButtonProps {
 	children: React.ReactNode;
@@ -39,9 +40,23 @@ export default function WeeklyView() {
 		return new Date(date.setDate(diff));
 	}
 
-	useEffect(() => {
+	const handleWeekChange = (direction: "next" | "prev") => {
+		const newDate = new Date(currentWeekStart);
+		if (direction === "next") {
+			newDate.setDate(newDate.getDate() + 7);
+		} else {
+			newDate.setDate(newDate.getDate() - 7);
+		}
+		setCurrentWeekStart(newDate);
+	};
+
+	const currentWeek = () => {
 		const today = new Date();
 		setCurrentWeekStart(getWeekStart(today));
+	};
+
+	useEffect(() => {
+		currentWeek();
 		setSettingUp(true);
 	}, []);
 
@@ -49,42 +64,51 @@ export default function WeeklyView() {
 	return (
 		<div className='h-[calc(100%-40px)] '>
 			<div className='flex items-center gap-3'>
-				<Button variant='outline'>Esta semana</Button>
+				<Button onClick={currentWeek} variant='outline'>
+					Esta semana
+				</Button>
 				<div className='flex gap-1'>
-					<HoverButton>
-						<ChevronLeft />
-					</HoverButton>
-					<HoverButton>
-						<ChevronRight />
-					</HoverButton>
+					<div onClick={() => handleWeekChange("prev")}>
+						<HoverButton>
+							<ChevronLeft />
+						</HoverButton>
+					</div>
+					<div onClick={() => handleWeekChange("next")}>
+						<HoverButton>
+							<ChevronRight />
+						</HoverButton>
+					</div>
 				</div>
 				{showMonths(currentWeekStart)}
 			</div>
-			{settingUp && (
+			<Loading active={!settingUp}>
 				<ScrollArea className='h-full w-full'>
-					<Table>
-						<TableHeader>
-							<TableRow>
-								<TableHead className='w-auto whitespace-nowrap'>
+					<Table className='block w-full'>
+						<TableHeader className='flex w-full'>
+							<TableRow className='flex flex-1 '>
+								<TableHead className='w-52 whitespace-nowrap flex items-center'>
 									Alumno
 								</TableHead>
 								{weekdays.map((day) => (
-									<TableHead key={day} className='text-center'>
+									<TableHead
+										key={day}
+										className='text-center flex-1 flex items-center justify-center'
+									>
 										{weekdaySpanish[day]} {currentWeekStart.getDate() + day}
 									</TableHead>
 								))}
 							</TableRow>
 						</TableHeader>
-						<TableBody>
+						<TableBody className='flex flex-col w-full'>
 							{Subjects[0].students.map((student) => (
-								<TableRow key={student.id}>
-									<TableCell className='w-auto whitespace-nowrap'>
+								<TableRow key={student.id} className='flex flex-1 '>
+									<TableCell className='w-52 whitespace-nowrap'>
 										{student.name} {student.surname}
 									</TableCell>
 									{weekdays.map((day) => (
 										<TableCell
 											key={day}
-											className={`bg-green-500 border-2 border-secondary rounded-lg`}
+											className={`bg-green-500 border-2 border-secondary rounded-lg flex-1`}
 										></TableCell>
 									))}
 								</TableRow>
@@ -92,7 +116,7 @@ export default function WeeklyView() {
 						</TableBody>
 					</Table>
 				</ScrollArea>
-			)}
+			</Loading>
 		</div>
 	);
 }
