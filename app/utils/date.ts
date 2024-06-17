@@ -1,3 +1,6 @@
+import { Weekday } from "@prisma/client";
+import { weekdayValues } from "../types/types";
+
 function capitalize(string: string) {
 	return string.charAt(0).toUpperCase() + string.slice(1);
 }
@@ -28,14 +31,9 @@ function formatDate(date: string, longMonth?: boolean, hideYear?: boolean) {
 	);
 }
 
-function formatDateLong(date: string) {
+function formatDateLong(date: Date) {
 	// format date string YYYY-MM-DD to MMMM DD, YYYY
-	const dateComponents = date.split("-");
-	const dateFormatted = new Date(
-		dateComponents[1] + "-" + dateComponents[2] + "-" + dateComponents[0]
-	);
-	const dateObj = new Date(dateFormatted);
-	return dateObj
+	return date
 		.toLocaleDateString("es-ES", {
 			weekday: "long",
 			day: "numeric",
@@ -72,4 +70,40 @@ function showMonths(date: Date) {
 	}
 }
 
-export { showMonths, formatDate, formatDateLong, formatDateToShort };
+function getDatesForWeekdays(
+	startingDate: Date,
+	endingDate: Date,
+	weekdays: Weekday[]
+) {
+	const dates: Date[] = [];
+	const weekdayNumbers = weekdays.map((weekday) => weekdayValues[weekday]);
+
+	const getNextWeekday = (date: Date, weekday: number): Date => {
+		const result = new Date(date);
+		result.setDate(date.getDate() + ((7 + weekday - date.getDay()) % 7));
+		return result;
+	};
+
+	let current = startingDate;
+	// Iterate through each weekday
+	for (const weekday of weekdayNumbers) {
+		let current = getNextWeekday(startingDate, weekday);
+
+		while (current <= endingDate) {
+			dates.push(new Date(current));
+			current.setDate(current.getDate() + 7); // Move to the next occurrence of the weekday
+		}
+	}
+
+	dates.sort((a, b) => a.getTime() - b.getTime());
+
+	return dates;
+}
+
+export {
+	showMonths,
+	formatDate,
+	formatDateLong,
+	formatDateToShort,
+	getDatesForWeekdays,
+};

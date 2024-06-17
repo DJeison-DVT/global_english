@@ -6,13 +6,23 @@ export async function GET(
 	{ params }: { params: { id: number } }
 ) {
 	try {
-		const id = params.id;
+		const id = Number(params.id);
 
-		const courses = await prisma.course.findMany({
-			where: {
-				id,
-			},
-		});
+		let courses;
+		try {
+			courses = await prisma.course.findUnique({
+				where: {
+					id,
+				},
+			});
+		} catch (error) {
+			console.error(error);
+			return new Response("Error getting companies", { status: 500 });
+		}
+
+		if (!courses) {
+			return new Response("Course not found", { status: 404 });
+		}
 
 		return new Response(JSON.stringify(courses), { status: 200 });
 	} catch (error) {

@@ -13,7 +13,6 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
 	try {
-		console.log("POST");
 		const { name, level, companyId, professorId, dateRange, weekdays } =
 			await request.json();
 		if (

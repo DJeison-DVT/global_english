@@ -51,7 +51,6 @@ function renderBreadcrumb(titles: string[], links: string[]) {
 export default async function Header({ titles, links }: HeaderProps) {
 	const token = await getSession();
 
-	console.log(titles, links);
 	return (
 		<div className='my-3'>
 			<div className='flex justify-between'>

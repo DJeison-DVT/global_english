@@ -9,7 +9,12 @@ async function getAllClasses() {
 }
 
 async function getClassById(id: number) {
-	const response = await fetch(`/api/class/${id}`);
+	const response = await fetch(URLBuilder(`/api/class/${id}`));
+
+	if (!response.ok) {
+		throw new Error("Class not found");
+	}
+
 	const data = await response.json();
 	return data;
 }
@@ -34,4 +39,4 @@ async function createClass(formData: z.infer<typeof CourseSchema>) {
 	return data;
 }
 
-export { getAllClasses, getClassByUser, createClass };
+export { getAllClasses, getClassByUser, createClass, getClassById };
