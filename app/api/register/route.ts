@@ -1,17 +1,17 @@
-import { UserCreation } from "@/lib/zod";
+import { UserCreationSchema } from "@/lib/zod";
 import { hash } from "bcryptjs";
 import prisma from "@/prisma/db";
 
 export async function POST(request: Request) {
 	try {
-		const { username, password, role } = await request.json();
-		if (!username || !password) {
-			return new Response("Username and password are required", {
+		const { username, password, role, name, surname } = await request.json();
+		if (!username || !password || !name || !surname) {
+			return new Response("Not all of the required fields were filled", {
 				status: 400,
 			});
 		}
 		try {
-			UserCreation.parse({ username, password, role });
+			UserCreationSchema.parse({ username, password, name, surname, role });
 		} catch (error) {
 			return new Response("Incorrect input", { status: 400 });
 		}
@@ -27,6 +27,8 @@ export async function POST(request: Request) {
 				data: {
 					username,
 					password: hashedPassword,
+					name,
+					surname,
 					role: role || "USER",
 				},
 			});

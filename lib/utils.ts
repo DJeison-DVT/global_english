@@ -24,6 +24,9 @@ export function URLBuilder(url: string) {
 		}
 	}
 
-	console.log(URL);
+	if (!URL.startsWith("http"))
+		URL = `${
+			process.env.NODE_ENV === "development" ? "http" : "https"
+		}://${URL}`;
 	return URL;
 }

@@ -2,6 +2,7 @@ import React from "react";
 import Sidebar from "./components/Sidebar";
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth";
+import { Toaster } from "@/components/ui/toaster";
 
 export default async function DashboardLayout({
 	children,
@@ -16,6 +17,7 @@ export default async function DashboardLayout({
 		<section className='min-h-screen max-h-screen max-w-screen flex '>
 			<Sidebar />
 			{children}
+			<Toaster />
 		</section>
 	);
 }

@@ -9,14 +9,13 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
-import { classAssistance } from "@/app/utils/consts";
-import { viewProps } from "../page";
 import { showMonths } from "@/app/utils/date";
 import { ChevronLeft, ChevronRight } from "react-feather";
-import { Subjects } from "@/app/utils/consts";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import Loading from "@/app/components/Loading";
+import { Student, Weekday } from "@prisma/client";
+import { weekdayValues } from "@/app/types/types";
 
 interface HoverButtonProps {
 	children: React.ReactNode;
@@ -28,11 +27,24 @@ const HoverButton: React.FC<HoverButtonProps> = ({ children }) => (
 	</button>
 );
 
-export default function WeeklyView({ totalStudents }: viewProps) {
-	const [currentWeekStart, setCurrentWeekStart] = useState(new Date());
-	const [settingUp, setSettingUp] = useState(false);
+interface WeeklyViewProps {
+	students: Student[];
+	weekdays: Weekday[];
+}
 
-	const weekdaySpanish = ["Lun", "Mar", "Mie", "Jue", "Vie"];
+export default function WeeklyView({ students, weekdays }: WeeklyViewProps) {
+	const [currentWeekStart, setCurrentWeekStart] = useState(new Date());
+	const [isLoading, setIsLoading] = useState(true);
+
+	const weekdaySpanish = {
+		MONDAY: "Lun",
+		TUESDAY: "Mar",
+		WEDNESDAY: "Mié",
+		THURSDAY: "Jue",
+		FRIDAY: "Vie",
+		SATURDAY: "Sáb",
+		SUNDAY: "Dom",
+	};
 
 	function getWeekStart(currDate: Date) {
 		const date = new Date(currDate);
@@ -42,60 +54,83 @@ export default function WeeklyView({ totalStudents }: viewProps) {
 		return new Date(date.setDate(diff));
 	}
 
-	useEffect(() => {
+	const handleWeekChange = (direction: "next" | "prev") => {
+		const newDate = new Date(currentWeekStart);
+		if (direction === "next") {
+			newDate.setDate(newDate.getDate() + 7);
+		} else {
+			newDate.setDate(newDate.getDate() - 7);
+		}
+		setCurrentWeekStart(newDate);
+	};
+
+	const currentWeek = () => {
 		const today = new Date();
 		setCurrentWeekStart(getWeekStart(today));
-		setSettingUp(true);
+	};
+
+	useEffect(() => {
+		setIsLoading(false);
 	}, []);
 
-	const weekdays = Subjects[0].weekdays;
 	return (
 		<div className='h-[calc(100%-40px)] '>
-			<div className='flex items-center gap-3'>
-				<Button variant='outline'>Esta semana</Button>
+			<div className='flex items-center gap-3 pb-2'>
+				<Button onClick={currentWeek} variant='outline'>
+					Esta semana
+				</Button>
 				<div className='flex gap-1'>
-					<HoverButton>
-						<ChevronLeft />
-					</HoverButton>
-					<HoverButton>
-						<ChevronRight />
-					</HoverButton>
+					<div onClick={() => handleWeekChange("prev")}>
+						<HoverButton>
+							<ChevronLeft />
+						</HoverButton>
+					</div>
+					<div onClick={() => handleWeekChange("next")}>
+						<HoverButton>
+							<ChevronRight />
+						</HoverButton>
+					</div>
 				</div>
 				{showMonths(currentWeekStart)}
 			</div>
-			{settingUp && (
+			<Loading active={isLoading}>
 				<ScrollArea className='h-full w-full'>
-					<Table>
-						<TableHeader>
-							<TableRow>
-								<TableHead className='w-auto whitespace-nowrap'>
+					<Table className='block w-full'>
+						<TableHeader className='flex w-full'>
+							<TableRow className='flex flex-1 '>
+								<TableHead className='w-52 whitespace-nowrap flex items-center'>
 									Alumno
 								</TableHead>
 								{weekdays.map((day) => (
-									<TableHead key={day} className='text-center'>
-										{weekdaySpanish[day]} {currentWeekStart.getDate() + day}
+									<TableHead
+										key={day}
+										className='text-center flex-1 flex items-center justify-center'
+									>
+										{weekdaySpanish[day]}{" "}
+										{currentWeekStart.getDate() + weekdayValues[day]}
 									</TableHead>
 								))}
 							</TableRow>
 						</TableHeader>
-						<TableBody>
-							{Subjects[0].students.map((student) => (
-								<TableRow key={student.id}>
-									<TableCell className='w-auto whitespace-nowrap'>
-										{student.name} {student.surname}
-									</TableCell>
-									{weekdays.map((day) => (
-										<TableCell
-											key={day}
-											className={`bg-green-500 border-2 border-secondary rounded-lg`}
-										></TableCell>
-									))}
-								</TableRow>
-							))}
+						<TableBody className='flex flex-col w-full'>
+							{students &&
+								students.map((student: Student) => (
+									<TableRow key={student.id} className='flex flex-1 '>
+										<TableCell className='w-52 whitespace-nowrap'>
+											{student.fullname}
+										</TableCell>
+										{weekdays.map((day) => (
+											<TableCell
+												key={day}
+												className={`bg-green-500 border-2 border-secondary rounded-lg flex-1`}
+											></TableCell>
+										))}
+									</TableRow>
+								))}
 						</TableBody>
 					</Table>
 				</ScrollArea>
-			)}
+			</Loading>
 		</div>
 	);
 }

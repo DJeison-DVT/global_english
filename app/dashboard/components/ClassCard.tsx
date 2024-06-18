@@ -12,9 +12,18 @@ import {
 import Link from "next/link";
 import { formatDate } from "@/app/utils/date";
 
-const ClassCard: React.FC<Subject> = ({
+interface ClassCardProps {
+	id: number;
+	company: string;
+	name: string;
+	startingDate: Date;
+	endDate: Date;
+}
+
+const ClassCard: React.FC<ClassCardProps> = ({
 	id,
 	company,
+	name,
 	startingDate,
 	endDate,
 }) => {
@@ -22,25 +31,31 @@ const ClassCard: React.FC<Subject> = ({
 	const handleClick = () => {
 		router.push(`/dashboard/classes/${id}`);
 	};
-
+	const start = new Date(startingDate);
+	const end = new Date(endDate);
 	return (
-		<div className='w-80'>
+		<div className='w-80 h-fit transition-opacity duration-500 ease-in-out opacity-100'>
 			<div
 				onClick={handleClick}
 				className='hover:cursor-pointer text-2xl flex bg-white items-end h-20 rounded-t-lg'
 			>
-				<div className='m-3'>{company}</div>
+				<div className='mx-3 my-1'>
+					<div className=''>{name}</div>
+					<div className='text-sm'>{company}</div>
+				</div>
 			</div>
-			<div className='flex p-4 justify-between items-center bg-primary text-white rounded-b-lg'>
+			<div className='flex p-3 justify-between items-center bg-primary text-white rounded-b-lg'>
 				<div onClick={handleClick} className='hover:cursor-pointer'>
-					{formatDate(startingDate)} - {formatDate(endDate)}
+					{formatDate(start.toISOString())} - {formatDate(end.toISOString())}
 				</div>
 				<div className='flex gap-2 '>
 					<TooltipProvider>
 						<Tooltip>
 							<TooltipTrigger>
 								<Link href={`dashboard/classes/${id}/tomar-asistencia`}>
-									<UserCheck />
+									<div className='flex justify-center items-center hover:bg-slate-600 p-1 rounded-full'>
+										<UserCheck />
+									</div>
 								</Link>
 							</TooltipTrigger>
 							<TooltipContent>
@@ -52,7 +67,9 @@ const ClassCard: React.FC<Subject> = ({
 					<TooltipProvider>
 						<Tooltip>
 							<TooltipTrigger>
-								<MoreVertical />
+								<div className='hover:bg-slate-600 p-1 rounded-full'>
+									<MoreVertical />
+								</div>
 							</TooltipTrigger>
 							<TooltipContent>
 								<p>Opciones</p>

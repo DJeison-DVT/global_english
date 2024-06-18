@@ -1,13 +1,17 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Briefcase, Calendar, Settings } from "react-feather";
-import {
-	Tooltip,
-	TooltipContent,
-	TooltipProvider,
-	TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Briefcase, Calendar, Power, Settings } from "react-feather";
 import MenuItem from "./MenuItem";
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuLabel,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { redirect } from "next/navigation";
+import { logout } from "@/lib/auth";
 
 export default function Sidebar() {
 	return (
@@ -30,17 +34,46 @@ export default function Sidebar() {
 						</Link>
 					</div>
 				</div>
-				<div className='flex justify-end'>
-					<TooltipProvider>
-						<Tooltip>
-							<TooltipTrigger>
+				<div className='flex justify-end outline-none'>
+					<DropdownMenu>
+						<DropdownMenuTrigger className='focus:outline-none'>
+							<div className='p-2 rounded-full hover:bg-primary/20 focus:bg-primary/20 focus-within:bg-primary/20'>
 								<Settings />
-							</TooltipTrigger>
-							<TooltipContent>
-								<p>Opciones</p>
-							</TooltipContent>
-						</Tooltip>
-					</TooltipProvider>
+							</div>
+						</DropdownMenuTrigger>
+						<DropdownMenuContent>
+							<DropdownMenuLabel>Mi Cuenta</DropdownMenuLabel>
+							<DropdownMenuSeparator />
+							<DropdownMenuItem>
+								<form
+									action={async () => {
+										"use server";
+										let response = null;
+										try {
+											response = await logout();
+										} catch (error) {
+											console.error(error);
+										}
+
+										if (response && response.status === 201) {
+											redirect("/");
+										} else {
+											console.error("received error from login API");
+										}
+									}}
+									className='w-full'
+								>
+									<button
+										type='submit'
+										className='flex justify-between w-full mr-2 items-center text-red-500'
+									>
+										<div>Salir</div>
+										<Power size={18} />
+									</button>
+								</form>
+							</DropdownMenuItem>
+						</DropdownMenuContent>
+					</DropdownMenu>
 				</div>
 			</div>
 		</div>
