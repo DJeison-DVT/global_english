@@ -15,6 +15,10 @@ const CompanySchema = z.object({
 	name: z.string().min(3).max(255),
 });
 
+const StudentsCreationSchema = z.object({
+	students: z.array(z.object({ name: z.string().min(3).max(255) })),
+});
+
 const StudentSchema = z.object({
 	fullname: z.string().min(3).max(255),
 	courseId: z.number(),
@@ -60,4 +64,5 @@ export {
 	CourseSchema,
 	CompanySchema,
 	StudentSchema,
+	StudentsCreationSchema,
 };

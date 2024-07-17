@@ -1,8 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Subject } from "@/app/types/types";
-import { MoreVertical, UserCheck, X } from "react-feather";
+import { UserCheck, X } from "react-feather";
 import {
 	Tooltip,
 	TooltipContent,
@@ -11,7 +10,7 @@ import {
 } from "@/components/ui/tooltip";
 import Link from "next/link";
 import { formatDate } from "@/app/utils/date";
-import { deleteClass } from "@/app/utils/api/classes";
+import StudentCreationDialog from "./StudentCreationDialog";
 
 interface ClassCardProps {
 	id: number;
@@ -19,7 +18,8 @@ interface ClassCardProps {
 	name: string;
 	startingDate: Date;
 	endDate: Date;
-	handleDelete: (id: string) => void;
+	handleDelete?: (id: string) => Promise<void> | null;
+	admin?: boolean;
 }
 
 const ClassCard: React.FC<ClassCardProps> = ({
@@ -28,7 +28,8 @@ const ClassCard: React.FC<ClassCardProps> = ({
 	name,
 	startingDate,
 	endDate,
-	handleDelete,
+	handleDelete = () => null,
+	admin = false,
 }) => {
 	const router = useRouter();
 	const handleClick = () => {
@@ -52,7 +53,7 @@ const ClassCard: React.FC<ClassCardProps> = ({
 				<div onClick={handleClick} className='hover:cursor-pointer'>
 					{formatDate(start.toISOString())} - {formatDate(end.toISOString())}
 				</div>
-				<div className='flex gap-2 '>
+				<div className='flex'>
 					<TooltipProvider>
 						<Tooltip>
 							<TooltipTrigger>
@@ -67,19 +68,19 @@ const ClassCard: React.FC<ClassCardProps> = ({
 							</TooltipContent>
 						</Tooltip>
 					</TooltipProvider>
-
-					<TooltipProvider>
-						<Tooltip>
-							<TooltipTrigger>
-								<div className='hover:bg-slate-600 p-1 rounded-full'>
-									<X onClick={() => handleDelete(String(id))} />
-								</div>
-							</TooltipTrigger>
-							<TooltipContent>
-								<p>Opciones</p>
-							</TooltipContent>
-						</Tooltip>
-					</TooltipProvider>
+					{admin && (
+						<>
+							<div className='flex justify-center items-center hover:bg-slate-600 p-1 rounded-full'>
+								<StudentCreationDialog classId={id} />
+							</div>
+							<div className='flex justify-center items-center hover:bg-slate-600 p-1 rounded-full'>
+								<X
+									className='hover:text-red-600 h-full w-full'
+									onClick={() => handleDelete(String(id))}
+								/>
+							</div>
+						</>
+					)}
 				</div>
 			</div>
 		</div>

@@ -131,6 +131,7 @@ export default function AdminDashboard() {
 								startingDate={course.startingDate}
 								endDate={course.endingDate}
 								handleDelete={handleClassDelete}
+								admin
 							/>
 						))
 					) : (
