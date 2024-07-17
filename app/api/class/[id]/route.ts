@@ -36,14 +36,19 @@ export async function DELETE(
 ) {
 	try {
 		const id = Number(params.id);
+		console.log("DELETE /api/class/:id", id);
 
-		const course = await prisma.course.delete({
-			where: {
-				id,
-			},
-		});
-
-		return new Response(JSON.stringify(course), { status: 200 });
+		try {
+			const course = await prisma.course.delete({
+				where: {
+					id,
+				},
+			});
+			return new Response(JSON.stringify(course), { status: 200 });
+		} catch (error) {
+			console.error(error);
+			return new Response("Error in DB ", { status: 500 });
+		}
 	} catch (error) {
 		return new Response("Error deleting course", { status: 500 });
 	}

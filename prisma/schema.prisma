@@ -9,8 +9,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  provider  = "postgresql"
+  url       = env("POSTGRES_URL") // uses connection pooling
   directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
@@ -48,7 +48,7 @@ model Course {
 model Student {
   id       Int        @id @default(autoincrement())
   fullname String
-  Course   Course     @relation(fields: [courseId], references: [id])
+  Course   Course     @relation(fields: [courseId], references: [id], onDelete: Cascade)
   courseId Int
   Attended Attended[]
 }
