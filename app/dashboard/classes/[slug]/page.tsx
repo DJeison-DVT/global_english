@@ -33,7 +33,12 @@ export default async function Page({ params }: ViewProps) {
 				/>
 			</TabsContent>
 			<TabsContent value='weekly' className='h-[calc(100%-40px)] '>
-				<WeeklyView students={students} weekdays={weekdays} params={params} />
+				<WeeklyView
+					course={course}
+					students={students}
+					weekdays={weekdays}
+					params={params}
+				/>
 			</TabsContent>
 		</Tabs>
 	);

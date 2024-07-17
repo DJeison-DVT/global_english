@@ -14,7 +14,7 @@ import { showMonths } from "@/app/utils/date";
 import { ChevronLeft, ChevronRight } from "react-feather";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Loading from "@/app/components/Loading";
-import { Student, Weekday, Attended } from "@prisma/client";
+import { Student, Weekday, Attended, Course } from "@prisma/client";
 import { weekdayValues } from "@/app/types/types";
 import { getAssistanceByClass } from "@/app/utils/api/assistance";
 
@@ -31,17 +31,21 @@ const HoverButton: React.FC<HoverButtonProps> = ({ children }) => (
 interface WeeklyViewProps {
 	students: Student[];
 	weekdays: Weekday[];
+	course: Course;
 	params: { slug: string };
 }
 
 export default function WeeklyView({
 	students,
 	weekdays,
+	course,
 	params,
 }: WeeklyViewProps) {
 	const [currentWeekStart, setCurrentWeekStart] = useState(new Date());
 	const [isLoading, setIsLoading] = useState(true);
 	const [assistance, setAssistance] = useState<Attended[]>([]);
+	const startingDate = new Date(course.startingDate);
+	const endingDate = new Date(course.endingDate);
 
 	const weekdaySpanish = {
 		MONDAY: "Lun",
@@ -87,17 +91,33 @@ export default function WeeklyView({
 	}
 
 	const handleWeekChange = (direction: "next" | "prev") => {
-		const newDate = new Date(currentWeekStart);
+		let newDate = new Date(currentWeekStart);
 		if (direction === "next") {
 			newDate.setDate(newDate.getDate() + 7);
 		} else {
 			newDate.setDate(newDate.getDate() - 7);
 		}
-		setCurrentWeekStart(newDate);
+
+		const startWeekDate = getWeekStart(new Date(startingDate));
+		const endWeekDate = getWeekStart(new Date(endingDate));
+		endWeekDate.setDate(endWeekDate.getDate() + 6); // End of the week containing the course end date
+
+		const minDate = new Date(startWeekDate);
+		minDate.setDate(minDate.getDate()); // One week before the course start date
+
+		const maxDate = new Date(endWeekDate);
+		maxDate.setDate(maxDate.getDate()); // One week after the course end date
+
+		if (newDate < minDate) {
+			newDate = minDate;
+		} else if (newDate > maxDate) {
+			newDate = maxDate;
+		}
+
+		currentWeek(newDate);
 	};
 
-	const currentWeek = () => {
-		const today = new Date();
+	const currentWeek = (today: Date = new Date()) => {
 		setCurrentWeekStart(getWeekStart(today));
 	};
 
@@ -108,7 +128,7 @@ export default function WeeklyView({
 	return (
 		<div className='h-[calc(100%-40px)] '>
 			<div className='flex items-center gap-3 pb-2'>
-				<Button onClick={currentWeek} variant='outline'>
+				<Button onClick={() => currentWeek()} variant='outline'>
 					Esta semana
 				</Button>
 				<div className='flex gap-1'>

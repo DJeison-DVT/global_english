@@ -1,10 +1,16 @@
+"use server";
+
 import { getApiURL } from "@/lib/utils";
 import { StudentsCreationSchema } from "@/lib/zod";
 import { z } from "zod";
 
 export async function getStudentsByClass(id: number) {
 	const res = await fetch(getApiURL(`/api/student/class/${id}`));
-	return await res.json();
+	if (!res.ok) {
+		throw new Error(`HTTP error! Status: ${res.status}`);
+	}
+	const result = await res.json();
+	return result;
 }
 
 export async function createStudents(

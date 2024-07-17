@@ -1,5 +1,6 @@
 import { getApiURL } from "@/lib/utils";
 import { CourseSchema } from "@/lib/zod";
+import { Course } from "@prisma/client";
 import { z } from "zod";
 
 async function getAllClasses() {
@@ -15,7 +16,7 @@ async function getClassById(id: number) {
 		throw new Error("Class not found");
 	}
 
-	const data = await response.json();
+	const data: Course = await response.json();
 	return data;
 }
 
