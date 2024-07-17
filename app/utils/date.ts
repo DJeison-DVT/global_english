@@ -80,11 +80,13 @@ function getDatesForWeekdays(
 
 	const getNextWeekday = (date: Date, weekday: number): Date => {
 		const result = new Date(date);
-		result.setDate(date.getDate() + ((7 + weekday - date.getDay()) % 7));
+		const day = result.getDay();
+		const diff = (weekday + 7 - day + 1) % 7;
+		result.setDate(result.getDate() + diff);
+		result.setHours(0, 0, 0, 0); // Set to start of the day
 		return result;
 	};
 
-	let current = startingDate;
 	// Iterate through each weekday
 	for (const weekday of weekdayNumbers) {
 		let current = getNextWeekday(startingDate, weekday);
@@ -92,6 +94,7 @@ function getDatesForWeekdays(
 		while (current <= endingDate) {
 			dates.push(new Date(current));
 			current.setDate(current.getDate() + 7); // Move to the next occurrence of the weekday
+			current.setHours(0, 0, 0, 0); // Reset to start of the day
 		}
 	}
 

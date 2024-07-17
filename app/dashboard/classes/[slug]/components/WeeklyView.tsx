@@ -14,8 +14,9 @@ import { showMonths } from "@/app/utils/date";
 import { ChevronLeft, ChevronRight } from "react-feather";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Loading from "@/app/components/Loading";
-import { Student, Weekday } from "@prisma/client";
+import { Student, Weekday, Attended } from "@prisma/client";
 import { weekdayValues } from "@/app/types/types";
+import { getAssistanceByClass } from "@/app/utils/api/assistance";
 
 interface HoverButtonProps {
 	children: React.ReactNode;
@@ -30,11 +31,17 @@ const HoverButton: React.FC<HoverButtonProps> = ({ children }) => (
 interface WeeklyViewProps {
 	students: Student[];
 	weekdays: Weekday[];
+	params: { slug: string };
 }
 
-export default function WeeklyView({ students, weekdays }: WeeklyViewProps) {
+export default function WeeklyView({
+	students,
+	weekdays,
+	params,
+}: WeeklyViewProps) {
 	const [currentWeekStart, setCurrentWeekStart] = useState(new Date());
 	const [isLoading, setIsLoading] = useState(true);
+	const [assistance, setAssistance] = useState<Attended[]>([]);
 
 	const weekdaySpanish = {
 		MONDAY: "Lun",
@@ -46,12 +53,37 @@ export default function WeeklyView({ students, weekdays }: WeeklyViewProps) {
 		SUNDAY: "Dom",
 	};
 
-	function getWeekStart(currDate: Date) {
-		const date = new Date(currDate);
-		const day = date.getDay();
+	const fetchAssistance = async () => {
+		const assistance = await getAssistanceByClass(params.slug);
+		setAssistance(assistance);
+		setIsLoading(false);
+	};
 
-		const diff = date.getDate() - day + (day == 0 ? -6 : 1);
-		return new Date(date.setDate(diff));
+	function getOffsetDate(day: Weekday): Date {
+		const startOfWeek = getWeekStart(currentWeekStart);
+		const offsetDate = new Date(startOfWeek);
+		offsetDate.setDate(startOfWeek.getDate() + weekdayValues[day]);
+		offsetDate.setHours(0, 0, 0, 0); // Set to start of the day
+		return offsetDate;
+	}
+
+	function compareDateStrings(date: Date, weekday: Weekday): boolean {
+		const dateString1 = date.toISOString();
+		const dateString2 = getOffsetDate(weekday).toISOString();
+
+		const datePart1 = dateString1.split("T")[0];
+		const datePart2 = dateString2.split("T")[0];
+		return datePart1 === datePart2;
+	}
+
+	function getWeekStart(date: Date): Date {
+		const currentDate = new Date(date);
+		const dayOfWeek = currentDate.getDay();
+		const start =
+			currentDate.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1);
+		currentDate.setDate(start);
+		currentDate.setHours(0, 0, 0, 0); // Set to start of the day
+		return currentDate;
 	}
 
 	const handleWeekChange = (direction: "next" | "prev") => {
@@ -70,7 +102,7 @@ export default function WeeklyView({ students, weekdays }: WeeklyViewProps) {
 	};
 
 	useEffect(() => {
-		setIsLoading(false);
+		fetchAssistance();
 	}, []);
 
 	return (
@@ -106,8 +138,7 @@ export default function WeeklyView({ students, weekdays }: WeeklyViewProps) {
 										key={day}
 										className='text-center flex-1 flex items-center justify-center'
 									>
-										{weekdaySpanish[day]}{" "}
-										{currentWeekStart.getDate() + weekdayValues[day]}
+										{weekdaySpanish[day]} {getOffsetDate(day).getDate()}
 									</TableHead>
 								))}
 							</TableRow>
@@ -119,12 +150,21 @@ export default function WeeklyView({ students, weekdays }: WeeklyViewProps) {
 										<TableCell className='w-52 whitespace-nowrap'>
 											{student.fullname}
 										</TableCell>
-										{weekdays.map((day) => (
-											<TableCell
-												key={day}
-												className={`bg-green-500 border-2 border-secondary rounded-lg flex-1`}
-											></TableCell>
-										))}
+										{weekdays.map((day) => {
+											const attended = assistance.some(
+												(record) =>
+													Number(record.studentId) === student.id &&
+													compareDateStrings(new Date(record.date), day)
+											);
+											return (
+												<TableCell
+													key={day}
+													className={`border-2 border-primary rounded-lg flex-1 ${
+														attended ? "bg-green-500" : "bg-red-500"
+													}`}
+												></TableCell>
+											);
+										})}
 									</TableRow>
 								))}
 						</TableBody>

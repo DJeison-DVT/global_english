@@ -36,9 +36,3 @@ export interface Subject {
 	students: Student[];
 	weekdays: Weekdays[];
 }
-
-export type Assistance = {
-	student: Student;
-	assisted: boolean;
-	class: Class;
-};

@@ -9,6 +9,10 @@ export async function getAssistanceByClass(classId: string) {
 		return null;
 	}
 
+	if (!response.ok && response.status !== 404) {
+		throw new Error("An error occurred while fetching the data.");
+	}
+
 	const data = await response.json();
 	return data;
 }
