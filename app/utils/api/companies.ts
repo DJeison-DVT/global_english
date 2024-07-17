@@ -1,11 +1,13 @@
+import { getApiURL } from "@/lib/utils";
+
 async function getAllCompanies() {
-	const response = await fetch("/api/companies");
+	const response = await fetch(getApiURL("/api/companies"));
 	const data = await response.json();
 	return data;
 }
 
 async function createCompany(formData: { name: string }) {
-	const response = await fetch("/api/companies", {
+	const response = await fetch(getApiURL("/api/companies"), {
 		body: JSON.stringify(formData),
 		method: "POST",
 	});

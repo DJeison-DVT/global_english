@@ -4,12 +4,13 @@ import { Token, decrypt, generateToken } from "@/app/utils/authHelpers";
 import { cookies } from "next/headers";
 import { z } from "zod";
 import { UserCreationSchema } from "./zod";
+import { getApiURL } from "./utils";
 
 export async function login(formData: FormData) {
 	const username = formData.get("username") as string;
 	const password = formData.get("password") as string;
 
-	const response = await fetch("/api/login", {
+	const response = await fetch(getApiURL("/api/login"), {
 		method: "POST",
 		body: JSON.stringify({ username, password }),
 	});
@@ -37,7 +38,7 @@ export async function login(formData: FormData) {
 
 export async function register(formData: z.infer<typeof UserCreationSchema>) {
 	const { username, password, role, name, surname } = formData;
-	await fetch("/api/register"),
+	await fetch(getApiURL("/api/register")),
 		{
 			method: "POST",
 			body: JSON.stringify({ username, password, role, name, surname }),
