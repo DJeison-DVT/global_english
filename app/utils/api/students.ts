@@ -1,4 +1,5 @@
 "use server";
+import { revalidatePath } from "next/cache";
 
 import { getApiURL } from "@/lib/utils";
 import { StudentsCreationSchema } from "@/lib/zod";
@@ -10,6 +11,7 @@ export async function getStudentsByClass(id: number) {
 		throw new Error(`HTTP error! Status: ${res.status}`);
 	}
 	const result = await res.json();
+	console.log(result);
 	return result;
 }
 
@@ -32,5 +34,7 @@ export async function createStudents(
 	});
 
 	const data = await response.json();
+
+	revalidatePath("/api/student/class/[id]', 'route'");
 	return data;
 }

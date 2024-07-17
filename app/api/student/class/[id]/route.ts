@@ -17,6 +17,8 @@ export async function GET(
 		if (!students) {
 			return new Response("No students found", { status: 404 });
 		}
+
+		return new Response(JSON.stringify(students), { status: 200 });
 	} catch (error) {
 		return new Response(null, { status: 500 });
 	}
