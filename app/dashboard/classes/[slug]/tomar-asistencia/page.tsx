@@ -26,16 +26,30 @@ import Loading from "@/app/components/Loading";
 import { getStudentsByClass } from "@/app/utils/api/students";
 import { getClassById } from "@/app/utils/api/classes";
 import { Course } from "@prisma/client";
+import { createAssistance } from "@/app/utils/api/assistance";
+import { useRouter } from "next/navigation";
 
 interface DayAssistanceProps {
-	setStudents: React.Dispatch<React.SetStateAction<Student[]>>;
+	setAssistanceStudents: React.Dispatch<React.SetStateAction<String[]>>;
+	assistanceStudents: String[];
 	students: Student[];
 }
 
 const DayAssistance: React.FC<DayAssistanceProps> = ({
 	students,
-	setStudents,
+	setAssistanceStudents,
+	assistanceStudents,
 }) => {
+	const handleCheckboxChange = (studentId: string) => {
+		setAssistanceStudents((prev) => {
+			if (prev.includes(studentId)) {
+				return prev.filter((id) => id !== studentId);
+			} else {
+				return [...prev, studentId];
+			}
+		});
+	};
+
 	return (
 		<Table>
 			<TableHeader>
@@ -52,7 +66,11 @@ const DayAssistance: React.FC<DayAssistanceProps> = ({
 							<TableCell>{idx}</TableCell>
 							<TableCell className=''>{student.fullname}</TableCell>
 							<TableCell className='flex justify-center items-center'>
-								<Checkbox className='h-8 w-8' />
+								<Checkbox
+									className='h-8 w-8'
+									checked={assistanceStudents.includes(student.id)}
+									onCheckedChange={() => handleCheckboxChange(student.id)}
+								/>
 							</TableCell>
 						</TableRow>
 					))}
@@ -67,6 +85,7 @@ interface AssitanceProps {
 
 export default function Page({ params }: AssitanceProps) {
 	const { toast } = useToast();
+	const router = useRouter();
 
 	const today = new Date();
 	const [selectedDate, setSelectedDate] = useState<string>("");
@@ -76,7 +95,7 @@ export default function Page({ params }: AssitanceProps) {
 
 	const [course, setCourse] = useState<Course>();
 	const [students, setStudents] = useState<Student[]>([]);
-	const [assistanceStudents, setAssistanceStudents] = useState<Student[]>([]);
+	const [assistanceStudents, setAssistanceStudents] = useState<String[]>([]);
 
 	const fetchCourse = async () => {
 		const course: Course = await getClassById(Number(params.slug));
@@ -99,9 +118,26 @@ export default function Page({ params }: AssitanceProps) {
 		setStudents(students);
 	};
 
-	// const fetchAssistance = async () => {
-	// 	getAssistanceByClass(params.slug);
-	// };
+	const handleCreateAssistance = async () => {
+		if (!course) return;
+
+		const response = await createAssistance(
+			course.id,
+			selectedDate,
+			assistanceStudents
+		);
+		if (response) {
+			toast({
+				title: "Asistencia guardada",
+				description: `La asistencia del dia ${selectedDate} se ha guardado correctamente`,
+			});
+			router.push(`/dashboard/classes/${course.id}`);
+		} else {
+			toast({
+				description: "Error al guardar la asistencia",
+			});
+		}
+	};
 
 	useEffect(() => {
 		fetchCourse();
@@ -144,23 +180,13 @@ export default function Page({ params }: AssitanceProps) {
 				</Select>
 				<ScrollArea className='w-full h-full my-4 '>
 					<DayAssistance
-						setStudents={setAssistanceStudents}
 						students={students}
+						assistanceStudents={assistanceStudents}
+						setAssistanceStudents={setAssistanceStudents}
 					/>
 				</ScrollArea>
 				<div className='flex justify-end'>
-					<Button
-						onClick={() => {
-							toast({
-								title: "Asistencia registrada",
-								description: `La asistencia para el día ${formatDateLong(
-									new Date(selectedDate)
-								)}`,
-							});
-						}}
-					>
-						Guardar
-					</Button>
+					<Button onClick={handleCreateAssistance}>Guardar</Button>
 				</div>
 			</Loading>
 		</div>

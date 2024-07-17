@@ -6,7 +6,7 @@ export async function GET(
 	{ params }: { params: { id: number } }
 ) {
 	try {
-		const courseId = params.id;
+		const courseId = Number(params.id);
 
 		let courses = null;
 		try {
@@ -34,28 +34,61 @@ export async function POST(
 	{ params }: { params: { id: number } }
 ) {
 	try {
-		const courseId = params.id;
+		const courseId = Number(params.id);
 		const body = await request.json();
 		const { students, date } = body;
 
+		const start = new Date(date).setUTCHours(0, 0, 0, 0);
+		const formattedDate = new Date(start).toISOString();
 		try {
-			await prisma.$transaction(
-				students.map((studentId: number) =>
-					prisma.attended.create({
-						data: {
-							courseId,
-							studentId,
-							date,
-						},
-					})
-				)
-			);
+			await prisma.$transaction(async (prisma) => {
+				// Delete existing attendance records for the given course and date
+				await prisma.attended.deleteMany({
+					where: {
+						courseId,
+						date: formattedDate,
+					},
+				});
+
+				// Create new attendance records
+				await prisma.attended.createMany({
+					data: students.map((studentId: number) => ({
+						courseId,
+						studentId,
+						date: formattedDate,
+					})),
+				});
+			});
+
+			return new Response(null, { status: 201 });
 		} catch (error) {
 			console.error(error);
 			return new Response(null, { status: 409 });
 		}
+	} catch (error) {
+		return new Response(null, { status: 500 });
+	}
+}
 
-		return new Response(null, { status: 201 });
+export async function DELETE(
+	request: NextRequest,
+	{ params }: { params: { id: number } }
+) {
+	try {
+		const courseId = Number(params.id);
+
+		try {
+			await prisma.attended.deleteMany({
+				where: {
+					courseId,
+				},
+			});
+
+			return new Response(null, { status: 204 });
+		} catch (error) {
+			console.error(error);
+			return new Response(null, { status: 409 });
+		}
 	} catch (error) {
 		return new Response(null, { status: 500 });
 	}
