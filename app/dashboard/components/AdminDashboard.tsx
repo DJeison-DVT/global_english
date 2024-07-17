@@ -19,13 +19,16 @@ interface SkeletonProps {
 
 const ClassSkeleton = ({ quantity }: SkeletonProps) => {
 	return Array.from({ length: quantity }).map((_, index) => (
-		<Skeleton className='rounded-lg h-[136px] bg-primary/25 w-80' />
+		<Skeleton key={index} className='rounded-lg h-[136px] bg-primary/25 w-80' />
 	));
 };
 
 const EntitySkeleton = ({ quantity }: SkeletonProps) => {
 	return Array.from({ length: quantity }).map((_, index) => (
-		<Skeleton className='rounded-lg h-[48px] bg-primary/25 w-[226px]' />
+		<Skeleton
+			key={index}
+			className='rounded-lg h-[48px] bg-primary/25 w-[226px]'
+		/>
 	));
 };
 
@@ -100,7 +103,9 @@ export default function AdminDashboard() {
 							{loadingCompanies ? (
 								<EntitySkeleton quantity={2} />
 							) : (
-								companies.map((company) => <CompanyCard company={company} />)
+								companies.map((company) => (
+									<CompanyCard key={company.id} company={company} />
+								))
 							)}
 						</div>
 					</div>

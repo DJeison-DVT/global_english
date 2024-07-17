@@ -1,7 +1,5 @@
-import { URLBuilder } from "@/lib/utils";
-
 async function getAllCompanies() {
-	const response = await fetch(URLBuilder("/api/companies"));
+	const response = await fetch("/api/companies");
 	const data = await response.json();
 	return data;
 }

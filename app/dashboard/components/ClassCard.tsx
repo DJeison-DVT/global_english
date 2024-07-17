@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { Subject } from "@/app/types/types";
-import { MoreVertical, UserCheck } from "react-feather";
+import { MoreVertical, UserCheck, X } from "react-feather";
 import {
 	Tooltip,
 	TooltipContent,
@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/tooltip";
 import Link from "next/link";
 import { formatDate } from "@/app/utils/date";
+import { deleteClass } from "@/app/utils/api/classes";
 
 interface ClassCardProps {
 	id: number;
@@ -33,6 +34,11 @@ const ClassCard: React.FC<ClassCardProps> = ({
 	};
 	const start = new Date(startingDate);
 	const end = new Date(endDate);
+
+	const handleDelete = async (id: string) => {
+		await deleteClass(id);
+	};
+
 	return (
 		<div className='w-80 h-fit transition-opacity duration-500 ease-in-out opacity-100'>
 			<div
@@ -68,7 +74,7 @@ const ClassCard: React.FC<ClassCardProps> = ({
 						<Tooltip>
 							<TooltipTrigger>
 								<div className='hover:bg-slate-600 p-1 rounded-full'>
-									<MoreVertical />
+									<X onClick={() => handleDelete(String(id))} />
 								</div>
 							</TooltipTrigger>
 							<TooltipContent>
