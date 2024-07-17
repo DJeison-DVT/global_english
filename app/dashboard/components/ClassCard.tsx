@@ -19,6 +19,7 @@ interface ClassCardProps {
 	name: string;
 	startingDate: Date;
 	endDate: Date;
+	handleDelete: (id: string) => void;
 }
 
 const ClassCard: React.FC<ClassCardProps> = ({
@@ -27,6 +28,7 @@ const ClassCard: React.FC<ClassCardProps> = ({
 	name,
 	startingDate,
 	endDate,
+	handleDelete,
 }) => {
 	const router = useRouter();
 	const handleClick = () => {
@@ -34,10 +36,6 @@ const ClassCard: React.FC<ClassCardProps> = ({
 	};
 	const start = new Date(startingDate);
 	const end = new Date(endDate);
-
-	const handleDelete = async (id: string) => {
-		await deleteClass(id);
-	};
 
 	return (
 		<div className='w-80 h-fit transition-opacity duration-500 ease-in-out opacity-100'>

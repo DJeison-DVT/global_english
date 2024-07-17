@@ -29,3 +29,22 @@ export async function GET(
 		return new Response("Error getting companies", { status: 500 });
 	}
 }
+
+export async function DELETE(
+	request: NextRequest,
+	{ params }: { params: { id: number } }
+) {
+	try {
+		const id = Number(params.id);
+
+		const course = await prisma.course.delete({
+			where: {
+				id,
+			},
+		});
+
+		return new Response(JSON.stringify(course), { status: 200 });
+	} catch (error) {
+		return new Response("Error deleting course", { status: 500 });
+	}
+}

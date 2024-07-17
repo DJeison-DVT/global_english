@@ -6,7 +6,7 @@ import UserCreationDialog from "./UserCreationDialog";
 import ClassCreationDialog from "./ClassCreationDialog";
 import { getAllUsers } from "@/app/utils/api/users";
 import { getAllCompanies } from "@/app/utils/api/companies";
-import { getAllClasses } from "@/app/utils/api/classes";
+import { deleteClass, getAllClasses } from "@/app/utils/api/classes";
 import ClassCard from "./ClassCard";
 import UserCard from "./UserCard";
 import CompanyCard from "./CompanyCard";
@@ -69,6 +69,11 @@ export default function AdminDashboard() {
 		fetchCompanies();
 	};
 
+	const handleClassDelete = async (id: string) => {
+		deleteClass(id);
+		fetchCompanies();
+	};
+
 	useEffect(() => {
 		fetchUsers();
 		fetchClasses();
@@ -125,6 +130,7 @@ export default function AdminDashboard() {
 								name={course.name}
 								startingDate={course.startingDate}
 								endDate={course.endingDate}
+								handleDelete={handleClassDelete}
 							/>
 						))
 					) : (
