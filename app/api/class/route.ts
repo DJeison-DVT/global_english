@@ -4,9 +4,12 @@ import prisma from "@/prisma/db";
 export async function GET(request: Request) {
 	try {
 		const companies = await prisma.course.findMany();
-		const response = new Response(JSON.stringify(companies), { status: 200 });
+		const response = new Response(JSON.stringify(companies), {
+			status: 200,
+		});
 		return response;
 	} catch (error) {
+		console.error(error);
 		return new Response("Error getting companies", { status: 500 });
 	}
 }

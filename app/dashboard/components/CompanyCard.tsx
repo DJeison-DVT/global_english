@@ -6,23 +6,25 @@ import {
 } from "@/components/ui/tooltip";
 import { Company } from "@prisma/client";
 import { Tool } from "react-feather";
+import DeletionDialog from "./DeletionDialog";
 
-export default function CompanyCard({ company }: { company: Company }) {
+interface CompanyCardProps {
+	company: Company;
+	handleCompanyDelete: (id: string) => Promise<void> | null;
+}
+
+export default function CompanyCard({
+	company,
+	handleCompanyDelete,
+}: CompanyCardProps) {
 	return (
-		<div className='flex w-full bg-background rounded-md p-2 justify-between gap-3'>
-			<div className='flex items-center'>{company.name}</div>
-			<TooltipProvider>
-				<Tooltip>
-					<TooltipTrigger>
-						<div className='hover:bg-slate-500/40 rounded-full p-1'>
-							<Tool />
-						</div>
-					</TooltipTrigger>
-					<TooltipContent>
-						<p>Editar</p>
-					</TooltipContent>
-				</Tooltip>
-			</TooltipProvider>
+		<div className="flex w-full bg-background rounded-md p-2 justify-between gap-3">
+			<div className="flex items-center">{company.name}</div>
+			<DeletionDialog
+				id={company.id}
+				title={company.name}
+				handleDelete={() => handleCompanyDelete(String(company.id))}
+			/>
 		</div>
 	);
 }

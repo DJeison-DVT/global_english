@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/tooltip";
 import { User } from "@prisma/client";
 import { X } from "react-feather";
+import DeletionDialog from "./DeletionDialog";
 
 interface UserCardProps {
 	user: User;
@@ -16,25 +17,15 @@ interface UserCardProps {
 
 export default function UserCard({ user, handleUserDelete }: UserCardProps) {
 	return (
-		<div className='flex w-full bg-background rounded-md p-2 justify-between gap-3'>
-			<div className='flex items-center'>
+		<div className="flex w-full bg-background rounded-md p-2 justify-between gap-3">
+			<div className="flex items-center">
 				{user.name} {user.surname}
 			</div>
-			<TooltipProvider>
-				<Tooltip>
-					<TooltipTrigger>
-						<div
-							className='hover:bg-slate-500/40 rounded-full p-1'
-							onClick={() => handleUserDelete(user.id)}
-						>
-							<X />
-						</div>
-					</TooltipTrigger>
-					<TooltipContent>
-						<p>Eliminar</p>
-					</TooltipContent>
-				</Tooltip>
-			</TooltipProvider>
+			<DeletionDialog
+				id={user.id}
+				title={`${user.username}`}
+				handleDelete={() => handleUserDelete(user.id)}
+			/>
 		</div>
 	);
 }

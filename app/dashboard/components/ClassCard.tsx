@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { UserCheck, X } from "react-feather";
+import { UserCheck } from "react-feather";
 import {
 	Tooltip,
 	TooltipContent,
@@ -11,6 +11,7 @@ import {
 import Link from "next/link";
 import { formatDate } from "@/app/utils/date";
 import StudentCreationDialog from "./StudentCreationDialog";
+import DeletionDialog from "./DeletionDialog";
 
 interface ClassCardProps {
 	id: number;
@@ -39,26 +40,29 @@ const ClassCard: React.FC<ClassCardProps> = ({
 	const end = new Date(endDate);
 
 	return (
-		<div className='w-80 h-fit transition-opacity duration-500 ease-in-out opacity-100'>
+		<div className="w-80 h-fit transition-opacity duration-500 ease-in-out opacity-100">
 			<div
 				onClick={handleClick}
-				className='hover:cursor-pointer text-2xl flex bg-white items-end h-20 rounded-t-lg'
+				className="hover:cursor-pointer text-2xl flex bg-white items-end h-20 rounded-t-lg"
 			>
-				<div className='mx-3 my-1'>
-					<div className=''>{name}</div>
-					<div className='text-sm'>{company}</div>
+				<div className="mx-3 my-1">
+					<div className="">{name}</div>
+					<div className="text-sm">{company}</div>
 				</div>
 			</div>
-			<div className='flex p-3 justify-between items-center bg-primary text-white rounded-b-lg'>
-				<div onClick={handleClick} className='hover:cursor-pointer'>
-					{formatDate(start.toISOString())} - {formatDate(end.toISOString())}
+			<div className="flex p-3 justify-between items-center bg-primary text-white rounded-b-lg">
+				<div onClick={handleClick} className="hover:cursor-pointer">
+					{formatDate(start.toISOString())} -{" "}
+					{formatDate(end.toISOString())}
 				</div>
-				<div className='flex'>
+				<div className="flex">
 					<TooltipProvider>
 						<Tooltip>
 							<TooltipTrigger>
-								<Link href={`dashboard/classes/${id}/tomar-asistencia`}>
-									<div className='flex justify-center items-center hover:bg-slate-600 p-1 rounded-full'>
+								<Link
+									href={`dashboard/classes/${id}/tomar-asistencia`}
+								>
+									<div className="flex justify-center items-center hover:bg-slate-600 p-1 rounded-full">
 										<UserCheck />
 									</div>
 								</Link>
@@ -70,13 +74,14 @@ const ClassCard: React.FC<ClassCardProps> = ({
 					</TooltipProvider>
 					{admin && (
 						<>
-							<div className='flex justify-center items-center hover:bg-slate-600 p-1 rounded-full'>
+							<div className="flex justify-center items-center hover:bg-slate-600 p-1 rounded-full">
 								<StudentCreationDialog classId={id} />
 							</div>
-							<div className='flex justify-center items-center hover:bg-slate-600 p-1 rounded-full'>
-								<X
-									className='hover:text-red-600 h-full w-full'
-									onClick={() => handleDelete(String(id))}
+							<div className="flex justify-center items-center hover:bg-slate-600 p-1 rounded-full">
+								<DeletionDialog
+									id={id}
+									title={name}
+									handleDelete={handleDelete}
 								/>
 							</div>
 						</>

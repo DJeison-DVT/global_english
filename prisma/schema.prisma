@@ -33,13 +33,13 @@ model Company {
 model Course {
   id           Int        @id @default(autoincrement())
   name         String
-  companyId    Int
-  professorId  Int
+  companyId    Int?
+  professorId  Int?
   startingDate DateTime
   endingDate   DateTime
   level        Level?
-  company      Company    @relation(fields: [companyId], references: [id])
-  professor    User       @relation(fields: [professorId], references: [id])
+  company      Company?   @relation(fields: [companyId], references: [id])
+  professor    User?      @relation(fields: [professorId], references: [id])
   students     Student[]
   weekdays     Weekday[]
   Attended     Attended[]
@@ -58,8 +58,8 @@ model Attended {
   date      DateTime
   studentId Int
   courseId  Int
-  student   Student  @relation(fields: [studentId], references: [id])
-  course    Course   @relation(fields: [courseId], references: [id])
+  student   Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
 }
 
 enum Role {

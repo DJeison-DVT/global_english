@@ -37,12 +37,12 @@ export async function login(formData: FormData) {
 }
 
 export async function register(formData: z.infer<typeof UserCreationSchema>) {
+	console.log(formData);
 	const { username, password, role, name, surname } = formData;
-	await fetch(getApiURL("/api/register")),
-		{
-			method: "POST",
-			body: JSON.stringify({ username, password, role, name, surname }),
-		};
+	await fetch(getApiURL("/api/register"), {
+		method: "POST",
+		body: JSON.stringify({ username, password, role, name, surname }),
+	});
 }
 
 export async function getSession() {

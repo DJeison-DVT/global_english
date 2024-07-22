@@ -1,7 +1,6 @@
 import { getApiURL } from "@/lib/utils";
 import { CourseSchema } from "@/lib/zod";
 import { Course } from "@prisma/client";
-import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 async function getAllClasses() {
@@ -50,7 +49,6 @@ async function deleteClass(id: string) {
 		throw new Error("Error deleting class");
 	}
 
-	revalidatePath("'/api/class/[id]', 'route'");
 }
 
 export {

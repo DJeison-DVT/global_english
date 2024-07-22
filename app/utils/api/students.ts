@@ -1,12 +1,15 @@
 "use server";
-import { revalidatePath } from "next/cache";
 
 import { getApiURL } from "@/lib/utils";
 import { StudentsCreationSchema } from "@/lib/zod";
 import { z } from "zod";
 
 export async function getStudentsByClass(id: number) {
-	const res = await fetch(getApiURL(`/api/student/class/${id}`));
+	const res = await fetch(getApiURL(`/api/student/class/${id}`), {
+		headers: {
+			'Cache-Control': 'no-cache',
+		},
+	});
 	if (!res.ok) {
 		throw new Error(`HTTP error! Status: ${res.status}`);
 	}
@@ -35,6 +38,5 @@ export async function createStudents(
 
 	const data = await response.json();
 
-	revalidatePath("/api/student/class/[id]', 'route'");
 	return data;
 }

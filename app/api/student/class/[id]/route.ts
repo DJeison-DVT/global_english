@@ -1,5 +1,6 @@
 import prisma from "@/prisma/db";
 import { NextRequest } from "next/server";
+import { revalidatePath } from "next/cache";
 
 export async function GET(
 	request: NextRequest,
@@ -78,6 +79,8 @@ export async function POST(
 
 				return registeredStudents;
 			});
+
+			revalidatePath(`/api/student/class/${courseId}`);
 			return new Response(JSON.stringify(result), { status: 200 });
 		} catch (error) {
 			console.error(error);
