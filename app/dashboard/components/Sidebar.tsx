@@ -29,9 +29,9 @@ export default function Sidebar() {
 						<Link href='/dashboard'>
 							<MenuItem title='Clases' icon={Briefcase} />
 						</Link>
-						<Link href='/dashboard'>
+						{/* <Link href='/dashboard'>
 							<MenuItem title='Calendario' icon={Calendar} />
-						</Link>
+						</Link> */}
 					</div>
 				</div>
 				<div className='flex justify-end outline-none'>

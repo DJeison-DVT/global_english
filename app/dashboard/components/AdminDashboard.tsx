@@ -4,14 +4,13 @@ import { useEffect, useState } from "react";
 import { Company, Course, User } from "@prisma/client";
 import UserCreationDialog from "./UserCreationDialog";
 import ClassCreationDialog from "./ClassCreationDialog";
-import { getAllUsers } from "@/app/utils/api/users";
+import { getAllUsers, deleteUser } from "@/app/utils/api/users";
 import { getAllCompanies } from "@/app/utils/api/companies";
 import { deleteClass, getAllClasses } from "@/app/utils/api/classes";
 import ClassCard from "./ClassCard";
 import UserCard from "./UserCard";
 import CompanyCard from "./CompanyCard";
 import { Skeleton } from "@/components/ui/skeleton";
-import { set } from "date-fns";
 
 interface SkeletonProps {
 	quantity: number;
@@ -70,8 +69,13 @@ export default function AdminDashboard() {
 	};
 
 	const handleClassDelete = async (id: string) => {
-		deleteClass(id);
-		fetchCompanies();
+		await deleteClass(id);
+		fetchClasses();
+	};
+
+	const handleUserDelete = async (id: number) => {
+		await deleteUser(id);
+		fetchUsers();
 	};
 
 	useEffect(() => {
@@ -100,7 +104,13 @@ export default function AdminDashboard() {
 							{loadingUsers ? (
 								<EntitySkeleton quantity={4} />
 							) : (
-								users.map((user) => <UserCard key={user.id} user={user} />)
+								users.map((user) => (
+									<UserCard
+										handleUserDelete={handleUserDelete}
+										key={user.id}
+										user={user}
+									/>
+								))
 							)}
 						</div>
 						<div className='flex-1 w-full flex flex-col gap-3'>

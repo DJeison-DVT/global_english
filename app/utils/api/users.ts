@@ -12,4 +12,12 @@ async function getProfessorUsers() {
 	return data;
 }
 
-export { getAllUsers, getProfessorUsers };
+async function deleteUser(id: number) {
+	const response = await fetch(getApiURL(`/api/users/${id}`), {
+		method: "DELETE",
+	});
+	const data = await response.json();
+	return data;
+}
+
+export { getAllUsers, getProfessorUsers, deleteUser };

@@ -36,7 +36,6 @@ export async function DELETE(
 ) {
 	try {
 		const id = Number(params.id);
-		console.log("DELETE /api/class/:id", id);
 
 		try {
 			const course = await prisma.course.delete({
