@@ -23,7 +23,7 @@ interface HoverButtonProps {
 }
 
 const HoverButton: React.FC<HoverButtonProps> = ({ children }) => (
-	<button className='h-8 w-8 hover:bg-slate-200 flex items-center justify-center rounded-full transition-colors duration-150'>
+	<button className="h-8 w-8 hover:bg-slate-200 flex items-center justify-center rounded-full transition-colors duration-150">
 		{children}
 	</button>
 );
@@ -90,6 +90,10 @@ export default function WeeklyView({
 		return currentDate;
 	}
 
+	const dateWithinRange = (date: Date): boolean => {
+		return date >= startingDate && date <= endingDate;
+	};
+
 	const handleWeekChange = (direction: "next" | "prev") => {
 		let newDate = new Date(currentWeekStart);
 		if (direction === "next") {
@@ -126,12 +130,12 @@ export default function WeeklyView({
 	}, []);
 
 	return (
-		<div className='h-[calc(100%-40px)] '>
-			<div className='flex items-center gap-3 pb-2'>
-				<Button onClick={() => currentWeek()} variant='outline'>
+		<div className="h-[calc(100%-40px)] ">
+			<div className="flex items-center gap-3 pb-2">
+				<Button onClick={() => currentWeek()} variant="outline">
 					Esta semana
 				</Button>
-				<div className='flex gap-1'>
+				<div className="flex gap-1">
 					<div onClick={() => handleWeekChange("prev")}>
 						<HoverButton>
 							<ChevronLeft />
@@ -146,43 +150,57 @@ export default function WeeklyView({
 				{showMonths(currentWeekStart)}
 			</div>
 			<Loading active={isLoading}>
-				<ScrollArea className='h-full w-full'>
-					<Table className='block w-full'>
-						<TableHeader className='flex w-full'>
-							<TableRow className='flex flex-1 '>
-								<TableHead className='w-52 whitespace-nowrap flex items-center'>
+				<ScrollArea className="h-full w-full">
+					<Table className="block w-full">
+						<TableHeader className="flex w-full">
+							<TableRow className="flex flex-1 ">
+								<TableHead className="w-52 whitespace-nowrap flex items-center">
 									Alumno
 								</TableHead>
 								{weekdays.map((day) => (
 									<TableHead
 										key={day}
-										className='text-center flex-1 flex items-center justify-center'
+										className="text-center flex-1 flex items-center justify-center"
 									>
-										{weekdaySpanish[day]} {getOffsetDate(day).getDate()}
+										{weekdaySpanish[day]}{" "}
+										{getOffsetDate(day).getDate()}
 									</TableHead>
 								))}
 							</TableRow>
 						</TableHeader>
-						<TableBody className='flex flex-col w-full'>
+						<TableBody className="flex flex-col w-full">
 							{students &&
 								students.map((student: Student) => (
-									<TableRow key={student.id} className='flex flex-1 '>
-										<TableCell className='w-52 whitespace-nowrap'>
+									<TableRow
+										key={student.id}
+										className="flex flex-1 "
+									>
+										<TableCell className="w-52 whitespace-nowrap">
 											{student.fullname}
 										</TableCell>
 										{weekdays.map((day) => {
 											const attended = assistance.some(
 												(record) =>
-													Number(record.studentId) === student.id &&
-													compareDateStrings(new Date(record.date), day)
+													Number(record.studentId) ===
+														student.id &&
+													compareDateStrings(
+														new Date(record.date),
+														day
+													)
 											);
 											return (
 												<TableCell
 													key={day}
 													className={`border-2 border-primary rounded-lg flex-1 ${
-														attended ? "bg-green-500" : "bg-red-500"
+														dateWithinRange(
+															getOffsetDate(day)
+														)
+															? attended
+																? "bg-green-500"
+																: "bg-red-500"
+															: "bg-slate-200 border-slate-400"
 													}`}
-												></TableCell>
+												/>
 											);
 										})}
 									</TableRow>
