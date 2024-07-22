@@ -76,27 +76,29 @@ export default function UserCreationDialog({
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogTrigger asChild>
-				<Button variant='outline'>Crear Usuario</Button>
+				<Button variant="outline">Crear Usuario</Button>
 			</DialogTrigger>
-			<DialogContent className='sm:max-w-md'>
+			<DialogContent className="sm:max-w-md">
 				<DialogHeader>
 					<DialogTitle>Crea un nuevo Usuario</DialogTitle>
 					<DialogDescription>
 						Aqui puedes crear nuevos usuarios, estos pueden ser:
 						<br />
-						- Administradores podran generar nuevas clases y profesores.
-						<br />- Profesores solo podran ver las clases asignadas a ellos.
+						- Administradores podran generar nuevas clases y
+						profesores.
+						<br />- Profesores solo podran ver las clases asignadas
+						a ellos.
 					</DialogDescription>
 				</DialogHeader>
 
 				<Form {...form}>
 					<form
 						onSubmit={form.handleSubmit(onSubmit)}
-						className='flex flex-col gap-3'
+						className="flex flex-col gap-3"
 					>
 						<FormField
 							control={form.control}
-							name='username'
+							name="username"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>Nombre de usuario</FormLabel>
@@ -109,12 +111,12 @@ export default function UserCreationDialog({
 						/>
 						<FormField
 							control={form.control}
-							name='password'
+							name="password"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>Contraseña</FormLabel>
 									<FormControl>
-										<Input type='password' {...field} />
+										<Input type="password" {...field} />
 									</FormControl>
 									<FormMessage />
 								</FormItem>
@@ -122,7 +124,7 @@ export default function UserCreationDialog({
 						/>
 						<FormField
 							control={form.control}
-							name='name'
+							name="name"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>Nombre</FormLabel>
@@ -135,7 +137,7 @@ export default function UserCreationDialog({
 						/>
 						<FormField
 							control={form.control}
-							name='surname'
+							name="surname"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>Apellidos</FormLabel>
@@ -148,7 +150,7 @@ export default function UserCreationDialog({
 						/>
 						<FormField
 							control={form.control}
-							name='role'
+							name="role"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>Rol</FormLabel>
@@ -159,15 +161,22 @@ export default function UserCreationDialog({
 											</SelectTrigger>
 										</FormControl>
 										<SelectContent>
-											<SelectItem value='USER'>Profesor</SelectItem>
-											<SelectItem value='ADMIN'>Administrado</SelectItem>
+											<SelectItem value="USER">
+												Profesor
+											</SelectItem>
+											<SelectItem value="ADMIN">
+												Administrado
+											</SelectItem>
+											<SelectItem value="SUPERVISOR">
+												Supervisor
+											</SelectItem>
 										</SelectContent>
 									</Select>
 									<FormMessage />
 								</FormItem>
 							)}
 						/>
-						<Button disabled={disabled} type='submit'>
+						<Button disabled={disabled} type="submit">
 							Submit
 						</Button>
 					</form>

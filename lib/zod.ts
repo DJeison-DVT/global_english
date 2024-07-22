@@ -8,7 +8,7 @@ const UserSchema = z.object({
 const UserCreationSchema = UserSchema.extend({
 	name: z.string().max(255),
 	surname: z.string().max(255),
-	role: z.enum(["ADMIN", "USER"]).optional(),
+	role: z.enum(["ADMIN", "USER", "SUPERVISOR"]).optional(),
 });
 
 const CompanySchema = z.object({

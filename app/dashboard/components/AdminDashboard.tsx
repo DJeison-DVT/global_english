@@ -11,6 +11,7 @@ import ClassCard from "./ClassCard";
 import UserCard from "./UserCard";
 import CompanyCard from "./CompanyCard";
 import { Skeleton } from "@/components/ui/skeleton";
+import SupervisorAssignment from "./SupervisorAssignment";
 
 interface SkeletonProps {
 	quantity: number;
@@ -104,6 +105,7 @@ export default function AdminDashboard() {
 						onCompanyCreated={handleCompanyCreation}
 						onUserCreated={handleUserCreation}
 					/>
+					<SupervisorAssignment courses={classes} />
 				</div>
 				<div className="flex flex-col m-3 flex-1">
 					<div className="flex flex-col flex-1">

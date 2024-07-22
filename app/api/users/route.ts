@@ -7,7 +7,7 @@ export async function GET(request: Request) {
 		try {
 			const url = new URL(request.url);
 			role = url.searchParams.get("role") as Role;
-			if (role && !["ADMIN", "USER"].includes(role)) {
+			if (role && !["ADMIN", "USER", "SUPERVISOR"].includes(role)) {
 				return new Response("Invalid role", { status: 400 });
 			}
 		} catch (error) {
