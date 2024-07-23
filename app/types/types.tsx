@@ -36,3 +36,5 @@ export interface Subject {
 	students: Student[];
 	weekdays: Weekdays[];
 }
+
+export type Role = "ADMIN" | "SUPERVISOR" | "USER";

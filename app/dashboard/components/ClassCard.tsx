@@ -20,6 +20,7 @@ interface ClassCardProps {
 	startingDate: Date;
 	endDate: Date;
 	handleDelete?: (id: string) => Promise<void> | null;
+	canTakeAttendance?: boolean;
 	admin?: boolean;
 }
 
@@ -31,6 +32,7 @@ const ClassCard: React.FC<ClassCardProps> = ({
 	endDate,
 	handleDelete = () => null,
 	admin = false,
+	canTakeAttendance = true,
 }) => {
 	const router = useRouter();
 	const handleClick = () => {
@@ -56,22 +58,24 @@ const ClassCard: React.FC<ClassCardProps> = ({
 					{formatDate(end.toISOString())}
 				</div>
 				<div className="flex">
-					<TooltipProvider>
-						<Tooltip>
-							<TooltipTrigger>
-								<Link
-									href={`dashboard/classes/${id}/tomar-asistencia`}
-								>
-									<div className="flex justify-center items-center hover:bg-slate-600 p-1 rounded-full">
-										<UserCheck />
-									</div>
-								</Link>
-							</TooltipTrigger>
-							<TooltipContent>
-								<p>Tomar Asistencia</p>
-							</TooltipContent>
-						</Tooltip>
-					</TooltipProvider>
+					{canTakeAttendance && (
+						<TooltipProvider>
+							<Tooltip>
+								<TooltipTrigger>
+									<Link
+										href={`dashboard/classes/${id}/tomar-asistencia`}
+									>
+										<div className="flex justify-center items-center hover:bg-slate-600 p-1 rounded-full">
+											<UserCheck />
+										</div>
+									</Link>
+								</TooltipTrigger>
+								<TooltipContent>
+									<p>Tomar Asistencia</p>
+								</TooltipContent>
+							</Tooltip>
+						</TooltipProvider>
+					)}
 					{admin && (
 						<>
 							<div className="flex justify-center items-center hover:bg-slate-600 p-1 rounded-full">

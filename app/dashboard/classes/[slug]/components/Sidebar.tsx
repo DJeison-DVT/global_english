@@ -12,16 +12,13 @@ export default async function Sidebar({ classId }: SidebarProps) {
 	if (!token) return null;
 
 	return (
-		<div className='flex flex-col w-48 gap-3'>
+		<div className="flex flex-col w-48 gap-3">
 			<Link href={`/dashboard/classes/${classId}`}>
-				<MenuItem title='Asistencias' icon={Users} />
+				<MenuItem title="Asistencias" icon={Users} />
 			</Link>
-			<Link href={`/dashboard/classes/${classId}/tomar-asistencia`}>
-				<MenuItem title='Tomar Asistencia' icon={UserCheck} />
-			</Link>
-			{token.role === "ADMIN" && (
-				<Link href={`/dashboard/classes/${classId}/settings`}>
-					<MenuItem title='Administrar Clase' icon={Tool} />
+			{token.role !== "SUPERVISOR" && (
+				<Link href={`/dashboard/classes/${classId}/tomar-asistencia`}>
+					<MenuItem title="Tomar Asistencia" icon={UserCheck} />
 				</Link>
 			)}
 		</div>

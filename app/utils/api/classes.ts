@@ -26,6 +26,12 @@ async function getClassByUser(userId: string) {
 	return data;
 }
 
+async function getClassBySupervisor(userId: string) {
+	const response = await fetch(getApiURL(`/api/class/supervisor/${userId}`));
+	const data = await response.json();
+	return data;
+}
+
 async function createClass(formData: z.infer<typeof CourseSchema>) {
 	console.log("sending data to create class");
 	const response = await fetch(getApiURL("/api/class"), {
@@ -48,12 +54,12 @@ async function deleteClass(id: string) {
 	if (!response.ok) {
 		throw new Error("Error deleting class");
 	}
-
 }
 
 export {
 	getAllClasses,
 	getClassByUser,
+	getClassBySupervisor,
 	createClass,
 	getClassById,
 	deleteClass,
